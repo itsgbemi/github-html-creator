@@ -1,219 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GitHub HTML Creator</title>
-  <!-- Quill Rich Text Editor CSS -->
-  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
   <style>
-    /* Embedded CSS */
-    :root {
-      --primary: #0366d6;
-      --success: #28a745;
-      --danger: #cb2431;
-      --border: #e1e4e8;
-      --text: #24292e;
-      --bg: #f6f8fa;
-    }
-    
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.6;
-      margin: 0;
-      padding: 20px;
-      background-color: var(--bg);
-      color: var(--text);
-    }
-    
-    .container {
-      max-width: 900px;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      max-width: 800px;
       margin: 0 auto;
-      background: white;
-      padding: 30px;
-      border-radius: 6px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+      padding: 20px;
+      line-height: 1.6;
     }
-    
-    h1 {
-      color: var(--text);
-      margin-top: 0;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 10px;
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    
-    input {
+    h1 { color: #24292e; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; font-weight: 600; margin-bottom: 5px; }
+    input, textarea {
       width: 100%;
-      padding: 8px 12px;
-      border: 1px solid var(--border);
+      padding: 8px;
+      border: 1px solid #e1e4e8;
       border-radius: 4px;
-      font-size: 14px;
+      font-family: monospace;
     }
-    
-    #editor {
-      height: 300px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-    }
-    
+    textarea { min-height: 300px; }
     button {
-      background: var(--success);
+      background: #2ea44f;
       color: white;
-      padding: 10px 20px;
       border: none;
+      padding: 10px 15px;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 16px;
-      transition: background 0.2s;
     }
-    
-    button:hover {
-      background: #22863a;
-    }
-    
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 4px;
-    }
-    
-    .success {
-      color: #22863a;
-      background: #f0fff4;
-      border: 1px solid #d1f3d8;
-    }
-    
-    .error {
-      color: var(--danger);
-      background: #ffebef;
-      border: 1px solid #f5c6cb;
-    }
-    
-    .ql-toolbar {
-      border-radius: 4px 4px 0 0 !important;
-    }
-    
-    .ql-container {
-      border-radius: 0 0 4px 4px !important;
-      font-family: inherit !important;
-    }
+    #result { margin-top: 20px; padding: 10px; border-radius: 4px; }
+    .success { background: #f0fff4; border: 1px solid #d1f3d8; }
+    .error { background: #ffebef; border: 1px solid #f5c6cb; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>GitHub HTML Creator</h1>
-    <form id="htmlForm">
-      <div class="form-group">
-        <label for="repo">Repository (owner/repo):</label>
-        <input type="text" id="repo" required placeholder="yourusername/reponame">
-      </div>
-      
-      <div class="form-group">
-        <label for="path">File path:</label>
-        <input type="text" id="path" required placeholder="docs/index.html">
-      </div>
-      
-      <div class="form-group">
-        <label>HTML Content:</label>
-        <div id="editor"></div>
-        <input type="hidden" id="html" name="html">
-      </div>
-      
-      <button type="submit">Create HTML File</button>
-    </form>
+  <h1>Create HTML File in GitHub</h1>
+  <form id="htmlForm">
+    <div class="form-group">
+      <label for="repo">Repository (owner/repo):</label>
+      <input type="text" id="repo" required placeholder="yourusername/reponame">
+    </div>
     
-    <div id="result" class="result" style="display: none;"></div>
-  </div>
+    <div class="form-group">
+      <label for="path">File path:</label>
+      <input type="text" id="path" required placeholder="docs/index.html">
+    </div>
+    
+    <div class="form-group">
+      <label for="content">HTML Body Content:</label>
+      <textarea id="content" required placeholder="<h1>Hello World</h1><p>My content</p>"></textarea>
+    </div>
+    
+    <button type="submit">Create File</button>
+  </form>
+  
+  <div id="result"></div>
 
-  <!-- Quill Rich Text Editor JS -->
-  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
   <script>
-    // Initialize Quill editor
-    const quill = new Quill('#editor', {
-      theme: 'snow',
-      modules: {
-        toolbar: [
-          [{ 'header': [1, 2, 3, false] }],
-          ['bold', 'italic', 'underline', 'strike'],
-          [{ 'color': [] }, { 'background': [] }],
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          ['link', 'image', 'video'],
-          ['clean']
-        ]
-      },
-      placeholder: 'Write your HTML content here...'
-    });
-
-    // Form submission
     document.getElementById('htmlForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
       const repo = document.getElementById('repo').value;
       const path = document.getElementById('path').value;
-      
-      // Get HTML from Quill editor
-      const html = document.getElementById('editor').querySelector('.ql-editor').innerHTML;
-      document.getElementById('html').value = html;
+      const content = document.getElementById('content').value;
       
       const resultEl = document.getElementById('result');
-      resultEl.style.display = 'block';
-      resultEl.innerHTML = '<p>Creating file...</p>';
-      resultEl.className = 'result';
+      resultEl.innerHTML = 'Creating file...';
+      resultEl.className = '';
       
       try {
         const response = await fetch('/api/create-html', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            repo, 
-            path, 
-            html: `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generated HTML</title>
-</head>
-<body>
-  ${html}
-</body>
-</html>` 
-          })
+          body: JSON.stringify({ repo, path, content })
         });
         
         const data = await response.json();
         
         if (response.ok) {
           resultEl.innerHTML = `
-            <p>✅ HTML file created successfully!</p>
-            <a href="${data.url}" target="_blank">View on GitHub</a>
-            <h3>Preview:</h3>
-            <iframe srcdoc="${html}" style="width:100%; height:300px; border:1px solid #ddd; margin-top:10px;"></iframe>
+            <p>✅ File created successfully!</p>
+            <p><a href="${data.url}" target="_blank">View on GitHub</a></p>
+            <details>
+              <summary>Preview</summary>
+              <iframe src="${data.downloadUrl}" style="width:100%; height:300px; border:1px solid #ddd; margin-top:10px;"></iframe>
+            </details>
           `;
           resultEl.classList.add('success');
         } else {
-          resultEl.innerHTML = `
-            <p>❌ Error: ${data.error || 'Unknown error'}</p>
-            ${data.details ? `<pre>${data.details}</pre>` : ''}
-          `;
+          resultEl.innerHTML = `<p>❌ Error: ${data.error || 'Unknown error'}</p>`;
           resultEl.classList.add('error');
         }
       } catch (error) {
-        resultEl.innerHTML = `
-          <p>❌ Network error</p>
-          <pre>${error.message}</pre>
-        `;
+        resultEl.innerHTML = `<p>❌ Network error: ${error.message}</p>`;
         resultEl.classList.add('error');
       }
     });
