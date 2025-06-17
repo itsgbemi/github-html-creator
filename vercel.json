@@ -3,16 +3,5 @@
   "public": true,
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/create-html" }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "POST, GET, OPTIONS" },
-        { "key": "Content-Security-Policy", 
-          "value": "default-src 'self'; script-src 'self' https://cdn.quilljs.com; style-src 'self' https://cdn.quilljs.com 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://cdn.quilljs.com" }
-      ]
-    }
   ]
 }
