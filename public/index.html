@@ -1,102 +1,190 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>GitHub HTML Creator</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      line-height: 1.6;
-    }
-    h1 { color: #24292e; }
-    .form-group { margin-bottom: 15px; }
-    label { display: block; font-weight: 600; margin-bottom: 5px; }
-    input, textarea {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #e1e4e8;
-      border-radius: 4px;
-      font-family: monospace;
-    }
-    textarea { min-height: 300px; }
-    button {
-      background: #2ea44f;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    #result { margin-top: 20px; padding: 10px; border-radius: 4px; }
-    .success { background: #f0fff4; border: 1px solid #d1f3d8; }
-    .error { background: #ffebef; border: 1px solid #f5c6cb; }
-  </style>
+<title>GitHub HTML Creator</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body {
+font-family: 'Source Sans Pro', sans-serif;
+max-width: 1000px;
+margin: 0 auto;
+padding: 0;
+line-height: 1.6;
+color: #333;
+}
+h1, h2, h3 {
+font-family: 'EB Garamond', serif;
+color: #24292e;
+}
+.top-bar {
+background: #24292e;
+padding: 15px 20px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+color: white;
+}
+.top-bar h1 {
+margin: 0;
+font-size: 1.5rem;
+color: white;
+}
+.top-bar button {
+background: #2ea44f;
+color: white;
+border: none;
+padding: 8px 16px;
+border-radius: 4px;
+cursor: pointer;
+font-weight: 600;
+}
+.tabs {
+display: flex;
+border-bottom: 1px solid #e1e4e8;
+}
+.tab {
+padding: 10px 20px;
+cursor: pointer;
+border-bottom: 2px solid transparent;
+}
+.tab.active {
+border-bottom: 2px solid #f9826c;
+font-weight: 600;
+}
+.tab-content {
+padding: 20px;
+display: none;
+}
+.tab-content.active {
+display: block;
+}
+.form-group {
+margin-bottom: 20px;
+}
+label {
+display: block;
+font-weight: 600;
+margin-bottom: 8px;
+}
+input, textarea {
+width: 100%;
+padding: 10px;
+border: 1px solid #e1e4e8;
+border-radius: 4px;
+font-family: monospace;
+}
+textarea {
+min-height: 300px;
+font-family: monospace;
+}
+.explanation {
+font-size: 0.9rem;
+color: #666;
+margin-top: 5px;
+}
+#result {
+margin-top: 20px;
+padding: 15px;
+border-radius: 4px;
+}
+.success {
+background: #f0fff4;
+border: 1px solid #d1f3d8;
+}
+.error {
+background: #ffebef;
+border: 1px solid #f5c6cb;
+}
+</style>
 </head>
 <body>
-  <h1>Create HTML File in GitHub</h1>
-  <form id="htmlForm">
-    <div class="form-group">
-      <label for="repo">Repository (owner/repo):</label>
-      <input type="text" id="repo" required placeholder="yourusername/reponame">
-    </div>
-    
-    <div class="form-group">
-      <label for="path">File path:</label>
-      <input type="text" id="path" required placeholder="docs/index.html">
-    </div>
-    
-    <div class="form-group">
-      <label for="content">HTML Body Content:</label>
-      <textarea id="content" required placeholder="<h1>Hello World</h1><p>My content</p>"></textarea>
-    </div>
-    
-    <button type="submit">Create File</button>
-  </form>
-  
-  <div id="result"></div>
+<div class="top-bar">
+<h1>GitHub HTML Creator</h1>
+<button type="button" id="createBtn">Create File</button>
+</div>
 
-  <script>
-    document.getElementById('htmlForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const repo = document.getElementById('repo').value;
-      const path = document.getElementById('path').value;
-      const content = document.getElementById('content').value;
-      
-      const resultEl = document.getElementById('result');
-      resultEl.innerHTML = 'Creating file...';
-      resultEl.className = '';
-      
-      try {
-        const response = await fetch('/api/create-html', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ repo, path, content })
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok) {
-          resultEl.innerHTML = `
-            <p>✅ File created successfully!</p>
-            <p><a href="${data.url}" target="_blank">View on GitHub</a></p>
-            <details>
-              <summary>Preview</summary>
-              <iframe src="${data.downloadUrl}" style="width:100%; height:300px; border:1px solid #ddd; margin-top:10px;"></iframe>
-            </details>
-          `;
-          resultEl.classList.add('success');
-        } else {
-          resultEl.innerHTML = `<p>❌ Error: ${data.error || 'Unknown error'}</p>`;
-          resultEl.classList.add('error');
-        }
-      } catch (error) {
-        resultEl.innerHTML = `<p>❌ Network error: ${error.message}</p>`;
-        resultEl.classList.add('error');
-      }
-    });
-  </script>
+<div class="tabs">
+<div class="tab active" data-tab="editor">Editor</div>
+<div class="tab" data-tab="settings">Settings</div>
+</div>
+
+<div class="tab-content active" id="editor">
+<div class="form-group">
+<label for="content">HTML Content:</label>
+<textarea id="content" required placeholder="<h1>Hello World</h1><p>My content</p>"></textarea>
+</div>
+</div>
+
+<div class="tab-content" id="settings">
+<div class="form-group">
+<label for="repo">Repository:</label>
+<input type="text" id="repo" required placeholder="yourusername/reponame">
+<div class="explanation">Format: owner/repository (e.g., octocat/hello-world)</div>
+</div>
+
+<div class="form-group">
+<label for="path">File Path:</label>
+<input type="text" id="path" required placeholder="docs/index.html">
+<div class="explanation">Path where file will be created (e.g., docs/index.html or pages/about.html)</div>
+</div>
+</div>
+
+<div id="result"></div>
+
+<script>
+// Tab functionality
+document.querySelectorAll('.tab').forEach(tab => {
+tab.addEventListener('click', () => {
+document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+tab.classList.add('active');
+document.getElementById(tab.dataset.tab).classList.add('active');
+});
+});
+
+// Form submission
+document.getElementById('createBtn').addEventListener('click', async () => {
+const repo = document.getElementById('repo').value;
+const path = document.getElementById('path').value;
+const content = document.getElementById('content').value;
+
+if (!repo || !path || !content) {
+alert('Please fill in all fields');
+return;
+}
+
+const resultEl = document.getElementById('result');
+resultEl.innerHTML = 'Creating file...';
+resultEl.className = '';
+
+try {
+const response = await fetch('/api/create-html', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ repo, path, content })
+});
+
+const data = await response.json();
+
+if (response.ok) {
+resultEl.innerHTML = `
+<p>✅ File created successfully!</p>
+<p><a href="${data.url}" target="_blank">View on GitHub</a></p>
+<details>
+<summary>Preview</summary>
+<iframe src="${data.downloadUrl}" style="width:100%; height:300px; border:1px solid #ddd; margin-top:10px;"></iframe>
+</details>
+`;
+resultEl.classList.add('success');
+} else {
+resultEl.innerHTML = `<p>❌ Error: ${data.error || 'Unknown error'}</p>`;
+resultEl.classList.add('error');
+}
+} catch (error) {
+resultEl.innerHTML = `<p>❌ Network error: ${error.message}</p>`;
+resultEl.classList.add('error');
+}
+});
+</script>
 </body>
 </html>
