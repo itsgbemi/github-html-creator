@@ -64,8 +64,6 @@ cursor: pointer;
 #result { margin-top: 20px; padding: 10px; border-radius: 4px; }
 .success { background: #f0fff4; border: 1px solid #d1f3d8; }
 .error { background: #ffebef; border: 1px solid #f5c6cb; }
-
-/* New styles for content builder */
 .content-builder {
 display: flex;
 gap: 20px;
@@ -108,7 +106,7 @@ border-color: #0366d6;
 </head>
 <body>
 <div class="top-bar">
-<h1>Create HTML File in GitHub</h1>
+<h1>HTML Editor</h1>
 <button type="submit" form="htmlForm">Create File</button>
 </div>
 
@@ -143,6 +141,10 @@ border-color: #0366d6;
 <label for="path">File path:</label>
 <input type="text" id="path" required placeholder="docs/index.html">
 </div>
+<div class="form-group">
+<label for="title">Page Title:</label>
+<input type="text" id="title" placeholder="My Page Title">
+</div>
 </div>
 </form>
 
@@ -158,7 +160,6 @@ document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
 });
 });
 
-// Content builder functionality
 const canvas = document.getElementById('contentCanvas');
 const contentInput = document.getElementById('content');
 
@@ -200,6 +201,7 @@ updateContentInput();
 const repo = document.getElementById('repo').value;
 const path = document.getElementById('path').value;
 const content = document.getElementById('content').value;
+const title = document.getElementById('title').value;
 
 const resultEl = document.getElementById('result');
 resultEl.innerHTML = '<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#24292e"><path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path></svg> Creating file...';
@@ -209,7 +211,7 @@ try {
 const response = await fetch('/api/create-html', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ repo, path, content })
+body: JSON.stringify({ repo, path, content, title })
 });
 
 const data = await response.json();
