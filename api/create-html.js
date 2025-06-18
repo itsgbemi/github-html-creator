@@ -3,7 +3,7 @@ if (req.method !== 'POST') {
 return res.status(405).json({ error: 'Only POST allowed' });
 }
 
-const { repo, path, content } = req.body;
+const { repo, path, content, title } = req.body;
 const token = process.env.GITHUB_PAT;
 
 if (!token) {
@@ -18,7 +18,7 @@ const fullHtml = `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${filename.split('/').pop()}</title>
+<title>${title || filename.split('/').pop()}</title>
 </head>
 <body>
 ${content}
