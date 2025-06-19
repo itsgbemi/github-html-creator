@@ -6,7 +6,7 @@
 <style>
 body {
   font-family: 'Source Sans Pro', sans-serif;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
   line-height: 1.6;
@@ -85,9 +85,12 @@ button {
 }
 .content-inserter {
   width: 200px;
+  height: 500px;
+  overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
+  padding: 10px;
 }
 .insert-block {
   background: transparent;
@@ -106,21 +109,17 @@ button {
 .icon-container {
   width: 50px;
   height: 50px;
-  border: 2px solid #e1e4e8;
-  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 8px;
-  transition: all 0.2s ease;
-}
-.insert-block:hover .icon-container {
-  border-color: #0366d6;
-  background: #f6f8fa;
 }
 .insert-block svg {
   width: 24px;
   height: 24px;
+  fill: #586069;
+}
+.insert-block:hover svg {
   fill: #0366d6;
 }
 .insert-block span {
@@ -147,6 +146,34 @@ button {
   .content-inserter {
     width: 100%;
     grid-template-columns: repeat(4, 1fr);
+    height: auto;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    padding: 0;
+  }
+  .content-inserter.open {
+    max-height: 60vh;
+    padding: 10px;
+  }
+  .mobile-footer {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 10px;
+    border-top: 1px solid #e1e4e8;
+    justify-content: center;
+    z-index: 100;
+  }
+  .mobile-footer button {
+    border-radius: 20px;
+    padding: 8px 20px;
+  }
+  body {
+    padding-bottom: 60px;
   }
 }
 @media (max-width: 480px) {
@@ -165,51 +192,52 @@ button {
 <form id="htmlForm">
   <div class="tabs">
     <div class="tab active" data-tab="content">HTML Content</div>
+    <div class="tab" data-tab="seo">SEO</div>
     <div class="tab" data-tab="settings">Settings</div>
   </div>
 
   <div class="tab-content active" id="content-tab">
     <div class="content-builder">
-      <div class="content-inserter">
+      <div class="content-inserter" id="contentInserter">
         <div class="insert-block" data-tag="h1">
           <div class="icon-container">
-            <svg viewBox="0 0 24 24"><path d="M5 4v3h5.5v12h3V7H19V4z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2v-7H4v-2h7V4h2v7h7v2h-7z"/></svg>
           </div>
           <span>Heading 1</span>
         </div>
         <div class="insert-block" data-tag="h2">
           <div class="icon-container">
-            <svg viewBox="0 0 24 24"><path d="M5 4v3h5.5v12h3V7H19V4h-7zm13 8h-7v3h7v3h-6v4h-3v-4H5v-3h6v-3H5v-3h7V8h3v3h6v3z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 4h3v6H5v3h6v-3H8V4h3V1H5v3zm10 10h3v6h-3v3h6v-3h-3v-6h3v-3h-6v3z"/></svg>
           </div>
           <span>Heading 2</span>
         </div>
         <div class="insert-block" data-tag="p">
           <div class="icon-container">
-            <svg viewBox="0 0 24 24"><path d="M10 5h7v3h-7zm0 5h7v3h-7zm0 5h7v3h-7zM5 5h3v13H5z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 5h7v3h-7zm0 5h7v3h-7zm0 5h7v3h-7zM5 5h3v13H5z"/></svg>
           </div>
           <span>Paragraph</span>
         </div>
         <div class="insert-block" data-tag="ul">
           <div class="icon-container">
-            <svg viewBox="0 0 24 24"><path d="M4 5h3v3H4zm0 5h3v3H4zm0 5h3v3H4zm5-10h12v3H9zm0 5h12v3H9zm0 5h12v3H9z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h3v3H4zm0 5h3v3H4zm0 5h3v3H4zm5-10h12v3H9zm0 5h12v3H9zm0 5h12v3H9z"/></svg>
           </div>
           <span>Bullet List</span>
         </div>
         <div class="insert-block" data-tag="ol">
           <div class="icon-container">
-            <svg viewBox="0 0 24 24"><path d="M4 5h3v3H4zm0 5h3v3H4zm0 5h3v3H4zm5-10h12v3H9zm0 5h12v3H9zm0 5h12v3H9z"/><circle cx="6.5" cy="6.5" r="1.5"/><circle cx="6.5" cy="11.5" r="1.5"/><circle cx="6.5" cy="16.5" r="1.5"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h3v3H4zm0 5h3v3H4zm0 5h3v3H4zm5-10h12v3H9zm0 5h12v3H9zm0 5h12v3H9z"/><circle cx="6.5" cy="6.5" r="1.5"/><circle cx="6.5" cy="11.5" r="1.5"/><circle cx="6.5" cy="16.5" r="1.5"/></svg>
           </div>
           <span>Numbered List</span>
         </div>
         <div class="insert-block" data-tag="div">
           <div class="icon-container">
-            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1" ry="1"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1" ry="1"/></svg>
           </div>
           <span>Div</span>
         </div>
         <div class="insert-block" data-tag="hr">
           <div class="icon-container">
-            <svg viewBox="0 0 24 24"><path d="M4 11h16v3H4z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11h16v3H4z"/></svg>
           </div>
           <span>Horizontal Line</span>
         </div>
@@ -217,6 +245,29 @@ button {
       <div class="content-canvas" id="contentCanvas"></div>
     </div>
     <textarea id="content" hidden required></textarea>
+  </div>
+
+  <div class="tab-content" id="seo-tab">
+    <div class="form-group">
+      <label for="title">Page Title:</label>
+      <input type="text" id="title" placeholder="My Awesome Page">
+    </div>
+    <div class="form-group">
+      <label for="description">Meta Description:</label>
+      <textarea id="description" placeholder="A brief description of the page content"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="keywords">Meta Keywords (comma separated):</label>
+      <input type="text" id="keywords" placeholder="html, web, design">
+    </div>
+    <div class="form-group">
+      <label for="author">Author:</label>
+      <input type="text" id="author" placeholder="Your Name">
+    </div>
+    <div class="form-group">
+      <label for="viewport">Viewport:</label>
+      <input type="text" id="viewport" value="width=device-width, initial-scale=1.0">
+    </div>
   </div>
 
   <div class="tab-content" id="settings-tab">
@@ -232,6 +283,10 @@ button {
 </form>
 
 <div id="result"></div>
+
+<div class="mobile-footer">
+  <button id="toggleInserter">Add Content Blocks</button>
+</div>
 
 <script>
 document.querySelectorAll('.tab').forEach(tab => {
@@ -285,6 +340,11 @@ document.getElementById('htmlForm').addEventListener('submit', async (e) => {
   const repo = document.getElementById('repo').value;
   const path = document.getElementById('path').value;
   const content = document.getElementById('content').value;
+  const title = document.getElementById('title').value;
+  const description = document.getElementById('description').value;
+  const keywords = document.getElementById('keywords').value;
+  const author = document.getElementById('author').value;
+  const viewport = document.getElementById('viewport').value;
 
   const resultEl = document.getElementById('result');
   resultEl.innerHTML = '<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#24292e"><path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path></svg> Creating file...';
@@ -294,7 +354,16 @@ document.getElementById('htmlForm').addEventListener('submit', async (e) => {
     const response = await fetch('/api/create-html', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ repo, path, content })
+      body: JSON.stringify({ 
+        repo, 
+        path, 
+        content,
+        title,
+        description,
+        keywords,
+        author,
+        viewport
+      })
     });
 
     const data = await response.json();
@@ -318,6 +387,16 @@ document.getElementById('htmlForm').addEventListener('submit', async (e) => {
     resultEl.classList.add('error');
   }
 });
+
+// Mobile inserter toggle
+const toggleInserter = document.getElementById('toggleInserter');
+const contentInserter = document.getElementById('contentInserter');
+
+if (toggleInserter) {
+  toggleInserter.addEventListener('click', () => {
+    contentInserter.classList.toggle('open');
+  });
+}
 </script>
 </body>
 </html>
