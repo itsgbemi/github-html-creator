@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>GitHub HTML Creator</title>
-<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
 body {
   font-family: 'Source Sans Pro', sans-serif;
@@ -11,7 +11,11 @@ body {
   padding: 20px;
   line-height: 1.6;
 }
-h1 { color: #24292e; }
+h1 { 
+  color: #24292e; 
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+}
 .top-bar {
   display: flex;
   justify-content: space-between;
@@ -86,10 +90,9 @@ button {
   gap: 10px;
 }
 .insert-block {
-  background: white;
-  border: 1px solid #e1e4e8;
-  border-radius: 8px;
-  padding: 15px 10px;
+  background: transparent;
+  border: none;
+  padding: 0;
   cursor: pointer;
   text-align: center;
   transition: all 0.2s ease;
@@ -98,14 +101,26 @@ button {
   align-items: center;
 }
 .insert-block:hover {
-  background: #f6f8fa;
   transform: translateY(-2px);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.icon-container {
+  width: 50px;
+  height: 50px;
+  border: 2px solid #e1e4e8;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+.insert-block:hover .icon-container {
+  border-color: #0366d6;
+  background: #f6f8fa;
 }
 .insert-block svg {
   width: 24px;
   height: 24px;
-  margin-bottom: 8px;
   fill: #0366d6;
 }
 .insert-block span {
@@ -157,31 +172,45 @@ button {
     <div class="content-builder">
       <div class="content-inserter">
         <div class="insert-block" data-tag="h1">
-          <svg viewBox="0 0 24 24"><path d="M5 4v3h5.5v12h3V7H19V4z"/></svg>
+          <div class="icon-container">
+            <svg viewBox="0 0 24 24"><path d="M5 4v3h5.5v12h3V7H19V4z"/></svg>
+          </div>
           <span>Heading 1</span>
         </div>
         <div class="insert-block" data-tag="h2">
-          <svg viewBox="0 0 24 24"><path d="M5 4v3h5.5v12h3V7H19V4h-7zm13 8h-7v3h7v3h-6v4h-3v-4H5v-3h6v-3H5v-3h7V8h3v3h6v3z"/></svg>
+          <div class="icon-container">
+            <svg viewBox="0 0 24 24"><path d="M5 4v3h5.5v12h3V7H19V4h-7zm13 8h-7v3h7v3h-6v4h-3v-4H5v-3h6v-3H5v-3h7V8h3v3h6v3z"/></svg>
+          </div>
           <span>Heading 2</span>
         </div>
         <div class="insert-block" data-tag="p">
-          <svg viewBox="0 0 24 24"><path d="M10 5h7v3h-7zm0 5h7v3h-7zm0 5h7v3h-7zM5 5h3v13H5z"/></svg>
+          <div class="icon-container">
+            <svg viewBox="0 0 24 24"><path d="M10 5h7v3h-7zm0 5h7v3h-7zm0 5h7v3h-7zM5 5h3v13H5z"/></svg>
+          </div>
           <span>Paragraph</span>
         </div>
         <div class="insert-block" data-tag="ul">
-          <svg viewBox="0 0 24 24"><path d="M4 5h3v3H4zm0 5h3v3H4zm0 5h3v3H4zm5-10h12v3H9zm0 5h12v3H9zm0 5h12v3H9z"/></svg>
+          <div class="icon-container">
+            <svg viewBox="0 0 24 24"><path d="M4 5h3v3H4zm0 5h3v3H4zm0 5h3v3H4zm5-10h12v3H9zm0 5h12v3H9zm0 5h12v3H9z"/></svg>
+          </div>
           <span>Bullet List</span>
         </div>
         <div class="insert-block" data-tag="ol">
-          <svg viewBox="0 0 24 24"><path d="M4 5h3v3H4zm0 5h3v3H4zm0 5h3v3H4zm5-10h12v3H9zm0 5h12v3H9zm0 5h12v3H9z"/><circle cx="6.5" cy="6.5" r="1.5"/><circle cx="6.5" cy="11.5" r="1.5"/><circle cx="6.5" cy="16.5" r="1.5"/></svg>
+          <div class="icon-container">
+            <svg viewBox="0 0 24 24"><path d="M4 5h3v3H4zm0 5h3v3H4zm0 5h3v3H4zm5-10h12v3H9zm0 5h12v3H9zm0 5h12v3H9z"/><circle cx="6.5" cy="6.5" r="1.5"/><circle cx="6.5" cy="11.5" r="1.5"/><circle cx="6.5" cy="16.5" r="1.5"/></svg>
+          </div>
           <span>Numbered List</span>
         </div>
         <div class="insert-block" data-tag="div">
-          <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1" ry="1"/></svg>
+          <div class="icon-container">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1" ry="1"/></svg>
+          </div>
           <span>Div</span>
         </div>
         <div class="insert-block" data-tag="hr">
-          <svg viewBox="0 0 24 24"><path d="M4 11h16v3H4z"/></svg>
+          <div class="icon-container">
+            <svg viewBox="0 0 24 24"><path d="M4 11h16v3H4z"/></svg>
+          </div>
           <span>Horizontal Line</span>
         </div>
       </div>
