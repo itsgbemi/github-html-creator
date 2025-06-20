@@ -32,15 +32,21 @@ export default async (req, res) => {
       '<meta charset="UTF-8">'
     ].filter(tag => tag).join('\n    ');
 
-    // Clean up inline styles from content (optional)
-    const cleanedContent = content.replace(/ style="[^"]*"/g, '');
-    
+    // Preserve all inline styles and formatting
     const fullHtml = `<!DOCTYPE html>
 <html>
 <head>
 ${metaTags}
 <style>
-/* Basic content styles */
+/* Base styles to ensure consistent rendering */
+body {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  color: #24292e;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
 h1, h2, h3, h4, h5, h6 {
   margin: 1em 0 0.5em;
   line-height: 1.2;
@@ -53,14 +59,12 @@ ul, ol {
   margin: 0 0 1em;
 }
 hr {
-  border: 0;
-  border-top: 1px solid #ccc;
   margin: 1em 0;
 }
 </style>
 </head>
 <body>
-${cleanedContent}
+${content}
 </body>
 </html>`;
 
@@ -72,28 +76,35 @@ ${cleanedContent}
       },
       body: JSON.stringify({
         message: 'Created via HTML Creator',
-        content: Buffer.from(fullHtml).toString('base64')
+        content: Buffer.from(fullHtml).toString('base64'),
+        // Optional: Set branch if needed
+        // branch: 'main' 
       })
     });
 
     const data = await response.json();
     
     if (!response.ok) {
+      console.error('GitHub API error:', data);
       return res.status(response.status).json({ 
         error: 'GitHub API error',
-        details: data.message || 'Unknown error'
+        details: data.message || 'Unknown error',
+        validation_errors: data.errors // Include validation errors if present
       });
     }
 
     res.status(200).json({
       url: data.content?.html_url,
-      downloadUrl: data.content?.download_url
+      downloadUrl: data.content?.download_url,
+      commit: data.commit // Include commit information
     });
 
   } catch (error) {
+    console.error('Failed to create file:', error);
     res.status(500).json({ 
       error: 'Failed to create file',
-      details: error.message 
+      details: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 };
