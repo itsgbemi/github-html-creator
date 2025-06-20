@@ -32,13 +32,35 @@ export default async (req, res) => {
       '<meta charset="UTF-8">'
     ].filter(tag => tag).join('\n    ');
 
+    // Clean up inline styles from content (optional)
+    const cleanedContent = content.replace(/ style="[^"]*"/g, '');
+    
     const fullHtml = `<!DOCTYPE html>
 <html>
 <head>
 ${metaTags}
+<style>
+/* Basic content styles */
+h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 0.5em;
+  line-height: 1.2;
+}
+p {
+  margin: 0 0 1em;
+}
+ul, ol {
+  padding-left: 2em;
+  margin: 0 0 1em;
+}
+hr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+}
+</style>
 </head>
 <body>
-${content}
+${cleanedContent}
 </body>
 </html>`;
 
