@@ -97,7 +97,7 @@ label {
   margin-bottom: 8px; 
   letter-spacing: 0.01em; 
 }
-input, textarea, select {
+input, textarea {
   width: 100%;
   padding: 12px 16px;
   border: 1px solid var(--gray-medium);
@@ -107,7 +107,7 @@ input, textarea, select {
   background: white;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus, textarea:focus {
   outline: none;
   border-color: var(--purple-dark);
   box-shadow: 0 0 0 2px rgba(94, 23, 235, 0.1);
@@ -137,11 +137,12 @@ button:hover {
 
 .content-builder {
   display: flex;
-  flex-direction: column;
   gap: 20px;
+  flex-direction: row;
 }
 
 .content-canvas {
+  flex: 1;
   min-height: 400px;
   border: 1px solid var(--gray-medium);
   border-radius: 8px;
@@ -149,70 +150,124 @@ button:hover {
   background: white;
 }
 
-.content-formatter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.content-inserter {
+  width: 200px;
+  height: 500px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
   padding: 12px;
   background: white;
   border: 1px solid var(--gray-medium);
   border-radius: 8px;
 }
 
-.format-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.format-button {
+.insert-block {
   background: transparent;
   border: none;
-  padding: 8px;
+  padding: 0;
   cursor: pointer;
-  border-radius: 4px;
+  text-align: center;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.insert-block:hover {
+  transform: translateY(-2px);
+}
+
+.icon-container {
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.format-button:hover {
+  margin-bottom: 8px;
   background: var(--gray-light);
+  border-radius: 50%;
 }
 
-.format-button.active {
-  background: rgba(94, 23, 235, 0.1);
-}
-
-.format-button svg {
-  width: 16px;
-  height: 16px;
+.insert-block svg {
+  width: 24px;
+  height: 24px;
   fill: var(--gray-dark);
 }
 
-.format-button:hover svg {
+.insert-block:hover svg {
   fill: var(--purple-dark);
 }
 
-.format-button.active svg {
-  fill: var(--purple-dark);
+.insert-block span {
+  font-size: 12px;
+  color: var(--gray-dark);
+  font-weight: 500;
 }
 
-select.format-select {
-  width: auto;
-  padding: 8px 12px;
+.canvas-block-container {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.canvas-block {
+  padding: 12px;
+  border: 1px dashed var(--gray-medium);
+  border-radius: 8px;
+  background: white;
+}
+
+.canvas-block:focus {
+  outline: none;
+  border-color: var(--purple-dark);
+}
+
+.block-controls {
+  display: flex;
+  gap: 8px;
+  padding: 4px;
+  background: var(--gray-light);
+  border-radius: 8px 8px 0 0;
+  border: 1px solid var(--gray-medium);
+  border-bottom: none;
+}
+
+.block-controls button {
+  padding: 4px 8px;
+  font-size: 12px;
+  background: transparent;
+  color: var(--gray-dark);
+  border: 1px solid var(--gray-medium);
+}
+
+.block-controls button:hover {
+  background: var(--gray-medium);
+  color: var(--text-dark);
+}
+
+.block-controls button.active {
+  background: var(--purple-dark);
+  color: white;
+}
+
+.block-controls select {
+  padding: 4px;
+  font-size: 12px;
   border-radius: 4px;
+  border: 1px solid var(--gray-medium);
+  background: white;
 }
 
-#editableContent {
-  min-height: 400px;
-  outline: none;
-  padding: 10px;
+.block-controls .delete-block {
+  margin-left: auto;
+  background: #ffebef;
+  color: #cb2431;
+  border-color: #f5c6cb;
 }
 
-#editableContent:focus {
-  outline: none;
+.block-controls .delete-block:hover {
+  background: #f5c6cb;
 }
 
 @media (max-width: 768px) {
@@ -225,23 +280,49 @@ select.format-select {
     font-size: 1.5em;
   }
   
-  .content-formatter {
+  .content-builder {
+    flex-direction: column;
+  }
+  
+  .content-inserter {
+    width: 100%;
+    display: flex;
+    height: auto;
     overflow-x: auto;
-    padding: 8px;
-    gap: 6px;
+    overflow-y: hidden;
+    padding: 12px;
+    gap: 8px;
+    scrollbar-width: none;
   }
   
-  .format-group {
-    gap: 6px;
+  .content-inserter::-webkit-scrollbar {
+    display: none;
   }
   
-  .format-button {
-    padding: 6px;
+  .insert-block {
+    min-width: 60px;
   }
   
-  select.format-select {
-    padding: 6px 8px;
-    font-size: 0.9em;
+  .insert-block span {
+    display: none;
+  }
+  
+  .icon-container {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0;
+  }
+  
+  .mobile-footer {
+    display: none;
+  }
+  
+  body {
+    padding-bottom: 20px;
+  }
+  
+  #seo-tab .form-group {
+    max-width: 100%;
   }
 }
 
@@ -259,17 +340,8 @@ select.format-select {
     padding: 10px 18px;
   }
   
-  input, textarea, select {
+  input, textarea {
     padding: 10px 14px;
-  }
-  
-  .content-formatter {
-    gap: 4px;
-  }
-  
-  .format-button svg {
-    width: 14px;
-    height: 14px;
   }
 }
 </style>
@@ -289,72 +361,51 @@ select.format-select {
 
   <div class="tab-content active" id="content-tab">
     <div class="content-builder">
-      <div class="content-formatter">
-        <div class="format-group">
-          <select class="format-select" id="fontFamily">
-            <option value="'Inter', sans-serif">Inter</option>
-            <option value="'EB Garamond', serif">EB Garamond</option>
-            <option value="Arial, sans-serif">Arial</option>
-            <option value="Georgia, serif">Georgia</option>
-            <option value="'Courier New', monospace">Courier New</option>
-          </select>
+      <div class="content-inserter" id="contentInserter">
+        <div class="insert-block" data-tag="h1">
+          <div class="icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2v-7H4v-2h7V4h2v7h7v2h-7z"/></svg>
+          </div>
+          <span>Heading 1</span>
         </div>
-        
-        <div class="format-group">
-          <select class="format-select" id="fontSize">
-            <option value="1em">Normal</option>
-            <option value="0.8em">Small</option>
-            <option value="1.2em">Large</option>
-            <option value="1.5em">Extra Large</option>
-          </select>
+        <div class="insert-block" data-tag="h2">
+          <div class="icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 4h3v6H5v3h6v-3H8V4h3V1H5v3zm10 10h3v6h-3v3h6v-3h-3v-6h3v-3h-6v3z"/></svg>
+          </div>
+          <span>Heading 2</span>
         </div>
-        
-        <div class="format-group">
-          <select class="format-select" id="headingType">
-            <option value="p">Paragraph</option>
-            <option value="h1">Heading 1</option>
-            <option value="h2">Heading 2</option>
-            <option value="h3">Heading 3</option>
-            <option value="h4">Heading 4</option>
-          </select>
+        <div class="insert-block" data-tag="p">
+          <div class="icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 5h7v3h-7zm0 5h7v3h-7zm0 5h7v3h-7zM5 5h3v13H5z"/></svg>
+          </div>
+          <span>Paragraph</span>
         </div>
-        
-        <div class="format-group">
-          <button class="format-button" id="boldButton" title="Bold">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M15.6,11.79c0.97-0.67,1.65-1.77,1.65-2.79c0-2.26-1.75-4-4-4H7v14h7.04c2.09,0,3.71-1.7,3.71-3.79 C17.75,13.72,16.73,12.5,15.6,11.79z M10,7.5h3c0.83,0,1.5,0.67,1.5,1.5s-0.67,1.5-1.5,1.5h-3V7.5z M13.5,16.5h-3v-3h3 c0.83,0,1.5,0.67,1.5,1.5S14.33,16.5,13.5,16.5z"/>
-            </svg>
-          </button>
-          <button class="format-button" id="italicButton" title="Italic">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M10,5v3h2.21l-3.42,8H6v3h8v-3h-2.21l3.42-8H18V5H10z"/>
-            </svg>
-          </button>
-          <button class="format-button" id="underlineButton" title="Underline">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M12,17c3.31,0,6-2.69,6-6V3h-2.5v8c0,1.93-1.57,3.5-3.5,3.5S8.5,12.93,8.5,11V3H6v8C6,14.31,8.69,17,12,17z M5,19v2h14 v-2H5z"/>
-            </svg>
-          </button>
+        <div class="insert-block" data-tag="ul">
+          <div class="icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h3v3H4zm0 5h3v3H4zm0 5h3v3H4zm5-10h12v3H9zm0 5h12v3H9zm0 5h12v3H9z"/></svg>
+          </div>
+          <span>Bullet List</span>
         </div>
-        
-        <div class="format-group">
-          <button class="format-button" id="unorderedListButton" title="Bullet List">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M4,10.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S4.83,10.5,4,10.5z M4,4.5c-0.83,0-1.5,0.67-1.5,1.5 S3.17,7.5,4,7.5S5.5,6.83,5.5,6S4.83,4.5,4,4.5z M4,16.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5 S4.83,16.5,4,16.5z M7,19h14v-2H7V19z M7,13h14v-2H7V13z M7,5v2h14V5H7z"/>
-            </svg>
-          </button>
-          <button class="format-button" id="orderedListButton" title="Numbered List">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M2,17h2v0.5H3v1h1v0.5H2v1h3v-4H2V17z M5,10.5H2V11h3V10.5z M2,13h1.8L2,15.1V16h3v-1H3.2L5,12.9V12H2V13z M7,5v2h14V5H7z M7,19h14v-2H7V19z M7,13h14v-2H7V13z"/>
-            </svg>
-          </button>
+        <div class="insert-block" data-tag="ol">
+          <div class="icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h3v3H4zm0 5h3v3H4zm0 5h3v3H4zm5-10h12v3H9zm0 5h12v3H9zm0 5h12v3H9z"/><circle cx="6.5" cy="6.5" r="1.5"/><circle cx="6.5" cy="11.5" r="1.5"/><circle cx="6.5" cy="16.5" r="1.5"/></svg>
+          </div>
+          <span>Numbered List</span>
+        </div>
+        <div class="insert-block" data-tag="div">
+          <div class="icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1" ry="1"/></svg>
+          </div>
+          <span>Div</span>
+        </div>
+        <div class="insert-block" data-tag="hr">
+          <div class="icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11h16v3H4z"/></svg>
+          </div>
+          <span>Horizontal Line</span>
         </div>
       </div>
-      <div class="content-canvas">
-        <div id="editableContent" contenteditable="true">
-          <p>Start typing here...</p>
-        </div>
-      </div>
+      <div class="content-canvas" id="contentCanvas"></div>
     </div>
     <textarea id="content" hidden required></textarea>
   </div>
@@ -411,43 +462,146 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-const editableContent = document.getElementById('editableContent');
+const canvas = document.getElementById('contentCanvas');
 const contentInput = document.getElementById('content');
 
-// Formatting functions
-function formatText(command, value = null) {
-  document.execCommand(command, false, value);
-  editableContent.focus();
-}
-
-// Event listeners for formatting buttons
-document.getElementById('boldButton').addEventListener('click', () => formatText('bold'));
-document.getElementById('italicButton').addEventListener('click', () => formatText('italic'));
-document.getElementById('underlineButton').addEventListener('click', () => formatText('underline'));
-document.getElementById('unorderedListButton').addEventListener('click', () => formatText('insertUnorderedList'));
-document.getElementById('orderedListButton').addEventListener('click', () => formatText('insertOrderedList'));
-
-// Font family change
-document.getElementById('fontFamily').addEventListener('change', (e) => {
-  formatText('fontName', e.target.value);
+document.querySelectorAll('.insert-block').forEach(block => {
+  block.addEventListener('click', () => {
+    const tag = block.dataset.tag;
+    const container = document.createElement('div');
+    container.className = 'canvas-block-container';
+    
+    const controls = document.createElement('div');
+    controls.className = 'block-controls';
+    
+    const newBlock = document.createElement('div');
+    newBlock.className = 'canvas-block';
+    newBlock.contentEditable = true;
+    
+    // Create delete button
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-block';
+    deleteBtn.innerHTML = '×';
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      container.remove();
+      updateContentInput();
+    });
+    
+    if (tag === 'ul' || tag === 'ol') {
+      newBlock.innerHTML = `<${tag}><li>List item</li></${tag}>`;
+      
+      // Add list style controls
+      const listStyleSelect = document.createElement('select');
+      listStyleSelect.innerHTML = `
+        <option value="disc">• Bullet</option>
+        <option value="circle">○ Circle</option>
+        <option value="square">■ Square</option>
+        <option value="none">None</option>
+      `;
+      if (tag === 'ol') {
+        listStyleSelect.innerHTML = `
+          <option value="decimal">1. Number</option>
+          <option value="lower-alpha">a. Lower Alpha</option>
+          <option value="upper-alpha">A. Upper Alpha</option>
+          <option value="lower-roman">i. Lower Roman</option>
+          <option value="upper-roman">I. Upper Roman</option>
+        `;
+      }
+      
+      listStyleSelect.addEventListener('change', (e) => {
+        newBlock.querySelector(tag).style.listStyleType = e.target.value;
+        updateContentInput();
+      });
+      
+      controls.appendChild(listStyleSelect);
+    } 
+    else if (tag === 'hr') {
+      newBlock.innerHTML = '<hr>';
+      newBlock.contentEditable = false;
+      
+      // Add HR style controls
+      const hrStyleSelect = document.createElement('select');
+      hrStyleSelect.innerHTML = `
+        <option value="solid">Solid</option>
+        <option value="dashed">Dashed</option>
+        <option value="dotted">Dotted</option>
+        <option value="double">Double</option>
+      `;
+      
+      const hrThicknessSelect = document.createElement('select');
+      hrThicknessSelect.innerHTML = `
+        <option value="1px">Thin</option>
+        <option value="2px">Medium</option>
+        <option value="4px">Thick</option>
+      `;
+      
+      hrStyleSelect.addEventListener('change', (e) => {
+        newBlock.querySelector('hr').style.borderTopStyle = e.target.value;
+        updateContentInput();
+      });
+      
+      hrThicknessSelect.addEventListener('change', (e) => {
+        newBlock.querySelector('hr').style.borderTopWidth = e.target.value;
+        updateContentInput();
+      });
+      
+      controls.appendChild(hrStyleSelect);
+      controls.appendChild(hrThicknessSelect);
+    } 
+    else {
+      newBlock.innerHTML = `<${tag}>${block.querySelector('span').textContent}</${tag}>`;
+      
+      // Add alignment controls for headings and paragraphs
+      if (tag === 'h1' || tag === 'h2' || tag === 'p' || tag === 'div') {
+        const alignLeft = document.createElement('button');
+        alignLeft.innerHTML = '↔ Left';
+        alignLeft.addEventListener('click', (e) => {
+          e.preventDefault();
+          newBlock.querySelector(tag).style.textAlign = 'left';
+          updateContentInput();
+        });
+        
+        const alignCenter = document.createElement('button');
+        alignCenter.innerHTML = '↔ Center';
+        alignCenter.addEventListener('click', (e) => {
+          e.preventDefault();
+          newBlock.querySelector(tag).style.textAlign = 'center';
+          updateContentInput();
+        });
+        
+        const alignRight = document.createElement('button');
+        alignRight.innerHTML = '↔ Right';
+        alignRight.addEventListener('click', (e) => {
+          e.preventDefault();
+          newBlock.querySelector(tag).style.textAlign = 'right';
+          updateContentInput();
+        });
+        
+        controls.appendChild(alignLeft);
+        controls.appendChild(alignCenter);
+        controls.appendChild(alignRight);
+      }
+    }
+    
+    controls.appendChild(deleteBtn);
+    container.appendChild(controls);
+    container.appendChild(newBlock);
+    canvas.appendChild(container);
+    updateContentInput();
+  });
 });
 
-// Font size change
-document.getElementById('fontSize').addEventListener('change', (e) => {
-  formatText('fontSize', e.target.value === '1em' ? '3' : e.target.value === '0.8em' ? '2' : e.target.value === '1.2em' ? '4' : '5');
-});
-
-// Heading type change
-document.getElementById('headingType').addEventListener('change', (e) => {
-  formatText('formatBlock', `<${e.target.value}>`);
-});
-
-// Update hidden textarea with HTML content
 function updateContentInput() {
-  contentInput.value = editableContent.innerHTML;
+  let html = '';
+  document.querySelectorAll('.canvas-block-container').forEach(container => {
+    const block = container.querySelector('.canvas-block');
+    html += block.innerHTML;
+  });
+  contentInput.value = html;
 }
 
-editableContent.addEventListener('input', updateContentInput);
+canvas.addEventListener('input', updateContentInput);
 
 document.getElementById('htmlForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -463,7 +617,7 @@ document.getElementById('htmlForm').addEventListener('submit', async (e) => {
   const viewport = document.getElementById('viewport').value;
 
   const resultEl = document.getElementById('result');
-  resultEl.innerHTML = '<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path></svg> Creating file...';
+  resultEl.innerHTML = '<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#24292e"><path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path></svg> Creating file...';
   resultEl.className = '';
 
   try {
@@ -486,7 +640,7 @@ document.getElementById('htmlForm').addEventListener('submit', async (e) => {
 
     if (response.ok) {
       resultEl.innerHTML = `
-        <p><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"/><polygon points="10 14.59 7.71 12.29 6.29 13.71 10 17.41 17.71 9.71 16.29 8.29 10 14.59"/></svg> File created successfully!</p>
+        <p><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2ea44f"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"/><polygon points="10 14.59 7.71 12.29 6.29 13.71 10 17.41 17.71 9.71 16.29 8.29 10 14.59"/></svg> File created successfully!</p>
         <p><a href="${data.url}" target="_blank">View on GitHub</a></p>
         <details>
           <summary>Preview</summary>
@@ -495,11 +649,11 @@ document.getElementById('htmlForm').addEventListener('submit', async (e) => {
       `;
       resultEl.classList.add('success');
     } else {
-      resultEl.innerHTML = `<p><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"/><rect x="11" y="6" width="2" height="9" rx="1"/><rect x="11" y="17" width="2" height="2" rx="1"/></svg> Error: ${data.error || 'Unknown error'}</p>`;
+      resultEl.innerHTML = `<p><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#cb2431"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"/><rect x="11" y="6" width="2" height="9" rx="1"/><rect x="11" y="17" width="2" height="2" rx="1"/></svg> Error: ${data.error || 'Unknown error'}</p>`;
       resultEl.classList.add('error');
     }
   } catch (error) {
-    resultEl.innerHTML = `<p><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"/><rect x="11" y="6" width="2" height="9" rx="1"/><rect x="11" y="17" width="2" height="2" rx="1"/></svg> Network error: ${error.message}</p>`;
+    resultEl.innerHTML = `<p><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#cb2431"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"/><rect x="11" y="6" width="2" height="9" rx="1"/><rect x="11" y="17" width="2" height="2" rx="1"/></svg> Network error: ${error.message}</p>`;
     resultEl.classList.add('error');
   }
 });
