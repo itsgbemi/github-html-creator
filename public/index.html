@@ -218,6 +218,7 @@ button:hover {
   padding: 20px;
   outline: none;
   font-size: 16px;
+  line-height: 1.6;
 }
 
 .content-editable h1 {
@@ -383,6 +384,18 @@ button:hover {
             <a href="#" data-font="Courier New, monospace">Courier New</a>
           </div>
         </div>
+        
+        <div class="format-dropdown">
+          <button class="format-dropdown-btn">
+            <span>1.6</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="format-dropdown-content">
+            <a href="#" data-lineheight="1.0">1.0</a>
+            <a href="#" data-lineheight="1.5">1.5</a>
+            <a href="#" data-lineheight="2.0">2.0</a>
+          </div>
+        </div>
       </div>
       
       <article class="content-editable" id="contentEditable" contenteditable="true">
@@ -452,6 +465,7 @@ const contentInput = document.getElementById('content');
 const formatDropdownBtn = document.querySelector('[data-format]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
 const sizeDropdownBtn = document.querySelector('[data-size]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
 const fontDropdownBtn = document.querySelector('[data-font]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
+const lineHeightDropdownBtn = document.querySelector('[data-lineheight]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
 
 // Format mapping for display
 const formatDisplayMap = {
@@ -555,6 +569,14 @@ document.querySelectorAll('.format-dropdown-content a').forEach(item => {
       // Update the dropdown button text
       const dropdownBtn = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn span');
       dropdownBtn.textContent = e.target.textContent.split(',')[0].replace(/'/g, '');
+    }
+    
+    if (e.target.hasAttribute('data-lineheight')) {
+      const lineHeight = e.target.getAttribute('data-lineheight');
+      contentEditable.style.lineHeight = lineHeight;
+      
+      // Update the dropdown button text
+      lineHeightDropdownBtn.textContent = lineHeight;
     }
     
     // Close the dropdown after selection
