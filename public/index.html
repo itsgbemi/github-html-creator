@@ -26,7 +26,7 @@ body {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  line-height: 1.6;
+  line-height: 1.5; /* Changed default line height to 1.5 */
   color: var(--text-dark);
   letter-spacing: -0.01em;
   background-color: var(--purple);
@@ -218,7 +218,7 @@ button:hover {
   padding: 20px;
   outline: none;
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.5; /* Changed default line height to 1.5 */
 }
 
 .content-editable h1 {
@@ -287,6 +287,7 @@ button:hover {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  vertical-align: middle;
   margin-right: 6px;
 }
 
@@ -427,7 +428,7 @@ button:hover {
         
         <div class="format-dropdown">
           <button class="format-dropdown-btn">
-            <span>1.6</span>
+            <span>1.5</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
           <div class="format-dropdown-content">
@@ -445,9 +446,9 @@ button:hover {
           </button>
           <div class="format-dropdown-content">
             <div class="dropdown-title">Alignment</div>
-            <a href="#" data-align="left"><span class="align-icon align-left-icon"></span>Left</a>
-            <a href="#" data-align="center"><span class="align-icon align-center-icon"></span>Center</a>
-            <a href="#" data-align="right"><span class="align-icon align-right-icon"></span>Right</a>
+            <a href="#" data-align="left"><span class="align-icon align-left-icon"></span> Left</a>
+            <a href="#" data-align="center"><span class="align-icon align-center-icon"></span> Center</a>
+            <a href="#" data-align="right"><span class="align-icon align-right-icon"></span> Right</a>
             <a href="#" data-align="justify"><span class="align-icon align-justify-icon"></span> Justify</a>
           </div>
         </div>
