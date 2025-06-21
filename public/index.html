@@ -269,6 +269,43 @@ button:hover {
   color: var(--gray-dark);
 }
 
+.dropdown-title {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75em;
+  letter-spacing: 0.05em;
+  color: var(--gray-dark);
+  padding: 8px 12px 4px;
+  border-bottom: 1px solid var(--gray-light);
+  margin-bottom: 4px;
+}
+
+.align-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 6px;
+}
+
+.align-left-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='4' y1='6' x2='20' y2='6'%3E%3C/line%3E%3Cline x1='4' y1='12' x2='14' y2='12'%3E%3C/line%3E%3Cline x1='4' y1='18' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+}
+
+.align-center-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='4' y1='6' x2='20' y2='6'%3E%3C/line%3E%3Cline x1='10' y1='12' x2='14' y2='12'%3E%3C/line%3E%3Cline x1='7' y1='18' x2='17' y2='18'%3E%3C/line%3E%3C/svg%3E");
+}
+
+.align-right-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='4' y1='6' x2='20' y2='6'%3E%3C/line%3E%3Cline x1='10' y1='12' x2='20' y2='12'%3E%3C/line%3E%3Cline x1='6' y1='18' x2='20' y2='18'%3E%3C/line%3E%3C/svg%3E");
+}
+
+.align-justify-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='4' y1='6' x2='20' y2='6'%3E%3C/line%3E%3Cline x1='4' y1='12' x2='20' y2='12'%3E%3C/line%3E%3Cline x1='4' y1='18' x2='20' y2='18'%3E%3C/line%3E%3C/svg%3E");
+}
+
 @media (max-width: 768px) {
   body {
     font-size: 14px;
@@ -336,6 +373,7 @@ button:hover {
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
           <div class="format-dropdown-content">
+            <div class="dropdown-title">Typeface</div>
             <a href="#" data-format="p"><span class="format-label">Tt</span> <span class="format-description">Paragraph</span></a>
             <a href="#" data-format="h1"><span class="format-label">H1</span> <span class="format-description">Heading 1</span></a>
             <a href="#" data-format="h2"><span class="format-label">H2</span> <span class="format-description">Heading 2</span></a>
@@ -348,26 +386,27 @@ button:hover {
         
         <div class="format-dropdown">
           <button class="format-dropdown-btn">
-            <span>16px</span>
+            <span>16</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
           <div class="format-dropdown-content">
-            <a href="#" data-size="8px">8px</a>
-            <a href="#" data-size="10px">10px</a>
-            <a href="#" data-size="12px">12px</a>
-            <a href="#" data-size="14px">14px</a>
-            <a href="#" data-size="16px">16px</a>
-            <a href="#" data-size="18px">18px</a>
-            <a href="#" data-size="20px">20px</a>
-            <a href="#" data-size="24px">24px</a>
-            <a href="#" data-size="28px">28px</a>
-            <a href="#" data-size="32px">32px</a>
-            <a href="#" data-size="36px">36px</a>
-            <a href="#" data-size="42px">42px</a>
-            <a href="#" data-size="48px">48px</a>
-            <a href="#" data-size="56px">56px</a>
-            <a href="#" data-size="64px">64px</a>
-            <a href="#" data-size="72px">72px</a>
+            <div class="dropdown-title">Text Size</div>
+            <a href="#" data-size="8px">8</a>
+            <a href="#" data-size="10px">10</a>
+            <a href="#" data-size="12px">12</a>
+            <a href="#" data-size="14px">14</a>
+            <a href="#" data-size="16px">16</a>
+            <a href="#" data-size="18px">18</a>
+            <a href="#" data-size="20px">20</a>
+            <a href="#" data-size="24px">24</a>
+            <a href="#" data-size="28px">28</a>
+            <a href="#" data-size="32px">32</a>
+            <a href="#" data-size="36px">36</a>
+            <a href="#" data-size="42px">42</a>
+            <a href="#" data-size="48px">48</a>
+            <a href="#" data-size="56px">56</a>
+            <a href="#" data-size="64px">64</a>
+            <a href="#" data-size="72px">72</a>
           </div>
         </div>
         
@@ -377,6 +416,7 @@ button:hover {
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
           <div class="format-dropdown-content">
+            <div class="dropdown-title">Font Family</div>
             <a href="#" data-font="Inter, sans-serif">Inter</a>
             <a href="#" data-font="'EB Garamond', serif">EB Garamond</a>
             <a href="#" data-font="Arial, sans-serif">Arial</a>
@@ -391,9 +431,24 @@ button:hover {
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
           <div class="format-dropdown-content">
+            <div class="dropdown-title">Line Height</div>
             <a href="#" data-lineheight="1.0">1.0</a>
             <a href="#" data-lineheight="1.5">1.5</a>
             <a href="#" data-lineheight="2.0">2.0</a>
+          </div>
+        </div>
+        
+        <div class="format-dropdown">
+          <button class="format-dropdown-btn">
+            <span class="align-icon align-left-icon"></span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="format-dropdown-content">
+            <div class="dropdown-title">Alignment</div>
+            <a href="#" data-align="left"><span class="align-icon align-left-icon"></span>Left</a>
+            <a href="#" data-align="center"><span class="align-icon align-center-icon"></span>Center</a>
+            <a href="#" data-align="right"><span class="align-icon align-right-icon"></span>Right</a>
+            <a href="#" data-align="justify"><span class="align-icon align-justify-icon"></span> Justify</a>
           </div>
         </div>
       </div>
@@ -466,6 +521,7 @@ const formatDropdownBtn = document.querySelector('[data-format]').closest('.form
 const sizeDropdownBtn = document.querySelector('[data-size]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
 const fontDropdownBtn = document.querySelector('[data-font]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
 const lineHeightDropdownBtn = document.querySelector('[data-lineheight]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
+const alignDropdownBtn = document.querySelector('[data-align]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
 
 // Format mapping for display
 const formatDisplayMap = {
@@ -476,6 +532,14 @@ const formatDisplayMap = {
   'h4': 'H4',
   'h5': 'H5',
   'h6': 'H6'
+};
+
+// Alignment icon mapping
+const alignIconMap = {
+  'left': 'align-left-icon',
+  'center': 'align-center-icon',
+  'right': 'align-right-icon',
+  'justify': 'align-justify-icon'
 };
 
 // Toggle dropdowns when clicking the button
@@ -514,7 +578,7 @@ function updateDropdownButtons() {
     // Update font size dropdown
     const computedStyle = window.getComputedStyle(element);
     const fontSize = computedStyle.fontSize;
-    sizeDropdownBtn.textContent = fontSize;
+    sizeDropdownBtn.textContent = fontSize.replace('px', '');
     
     // Update font family dropdown
     const fontFamily = computedStyle.fontFamily;
@@ -528,6 +592,13 @@ function updateDropdownButtons() {
       fontDropdownBtn.textContent = 'Courier New';
     } else {
       fontDropdownBtn.textContent = 'Inter';
+    }
+    
+    // Update alignment dropdown
+    const textAlign = computedStyle.textAlign;
+    if (textAlign && alignIconMap[textAlign]) {
+      const alignIcon = document.querySelector('.format-dropdown-btn .align-icon');
+      alignIcon.className = 'align-icon ' + alignIconMap[textAlign];
     }
   }
 }
@@ -577,6 +648,15 @@ document.querySelectorAll('.format-dropdown-content a').forEach(item => {
       
       // Update the dropdown button text
       lineHeightDropdownBtn.textContent = lineHeight;
+    }
+    
+    if (e.target.hasAttribute('data-align')) {
+      const align = e.target.getAttribute('data-align');
+      document.execCommand('justify' + align.charAt(0).toUpperCase() + align.slice(1));
+      
+      // Update the dropdown button icon
+      const alignIcon = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn .align-icon');
+      alignIcon.className = 'align-icon ' + alignIconMap[align];
     }
     
     // Close the dropdown after selection
