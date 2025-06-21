@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Blog Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #f9f9f9;
+  --purple-dark: #5e17eb;
+  --gray-light: #f5f5f5;
+  --gray-medium: #e1e4e8;
+  --gray-dark: #586069;
+  --text-dark: #24292e;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+  color: var(--text-dark);
+  letter-spacing: -0.01em;
+  background-color: var(--purple);
+  padding: 20px;
+}
+
+h1 { 
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  color: var(--text-dark); 
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 20px;
+  background: transparent;
+  border: 1px solid transparent;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.tab.active {
+  background: rgba(94, 23, 235, 0.1);
+  border-color: var(--purple-dark);
+  opacity: 1;
+  color: var(--purple-dark);
+  font-weight: 600;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.form-group { 
+  margin-bottom: 20px;
+}
+.form-group .help-text {
+  font-size: 0.85em;
+  color: var(--gray-dark);
+  margin-top: 4px;
+  font-weight: 400;
+}
+label { 
+  display: block; 
+  font-weight: 500; 
+  margin-bottom: 8px; 
+  letter-spacing: 0.01em; 
+}
+input, textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--gray-medium);
+  border-radius: 20px;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--purple-dark);
+  box-shadow: 0 0 0 2px rgba(94, 23, 235, 0.1);
+}
+
+textarea { min-height: 300px; }
+
+button {
+  background: var(--purple-dark);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: #4e17eb;
+}
+
+#result { margin-top: 20px; padding: 16px; border-radius: 8px; }
+.success { background: #f0fff4; border: 1px solid #d1f3d8; }
+.error { background: #ffebef; border: 1px solid #f5c6cb; }
+
+/* Word Processor Styles */
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--gray-medium);
+  border-radius: 8px;
+  background: white;
+  overflow: hidden;
+}
+
+.format-toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--gray-medium);
+  background: var(--gray-light);
+  flex-wrap: wrap;
+}
+
+.format-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.format-dropdown-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid var(--gray-medium);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.format-dropdown-btn:hover {
+  background: var(--gray-light);
+}
+
+.format-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  z-index: 1;
+  border: 1px solid var(--gray-medium);
+  border-radius: 4px;
+  top: 100%;
+  left: 0;
+}
+
+.format-dropdown-content a {
+  color: var(--text-dark);
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+}
+
+.format-dropdown-content a:hover {
+  background-color: var(--gray-light);
+}
+
+.format-dropdown:hover .format-dropdown-content {
+  display: block;
+}
+
+.content-editable {
+  min-height: 400px;
+  padding: 20px;
+  outline: none;
+}
+
+.content-editable h1 {
+  font-family: 'EB Garamond', serif;
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+}
+
+.content-editable h2 {
+  font-family: 'EB Garamond', serif;
+  font-size: 2em;
+  margin-bottom: 0.5em;
+}
+
+.content-editable h3 {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.content-editable h4 {
+  font-size: 1.3em;
+  margin-bottom: 0.5em;
+}
+
+.content-editable h5 {
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+}
+
+.content-editable h6 {
+  font-size: 1em;
+  margin-bottom: 0.5em;
+  color: var(--gray-dark);
+}
+
+.content-editable p {
+  margin-bottom: 1em;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+    padding: 15px;
+  }
+  
+  h1 {
+    font-size: 1.5em;
+  }
+  
+  .format-toolbar {
+    gap: 4px;
+    padding: 8px;
+  }
+  
+  .format-dropdown-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  
+  .content-editable {
+    min-height: 300px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 13px;
+  }
+  
+  .tab {
+    padding: 6px 12px;
+    font-size: 0.9em;
+  }
+  
+  button {
+    padding: 10px 18px;
+  }
+  
+  input, textarea {
+    padding: 10px 14px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <h1>Blog Editor</h1>
+  <button type="submit" form="htmlForm">Create File</button>
+</div>
+
+<form id="htmlForm">
+  <div class="tabs">
+    <div class="tab active" data-tab="content">Content</div>
+    <div class="tab" data-tab="seo">SEO</div>
+    <div class="tab" data-tab="settings">Settings</div>
+  </div>
+
+  <div class="tab-content active" id="content-tab">
+    <div class="editor-container">
+      <div class="format-toolbar">
+        <div class="format-dropdown">
+          <button class="format-dropdown-btn">
+            <span>Paragraph</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="format-dropdown-content">
+            <a href="#" data-format="p">Paragraph</a>
+            <a href="#" data-format="h1">Heading 1</a>
+            <a href="#" data-format="h2">Heading 2</a>
+            <a href="#" data-format="h3">Heading 3</a>
+            <a href="#" data-format="h4">Heading 4</a>
+            <a href="#" data-format="h5">Heading 5</a>
+            <a href="#" data-format="h6">Heading 6</a>
+          </div>
+        </div>
+        
+        <div class="format-dropdown">
+          <button class="format-dropdown-btn">
+            <span>16px</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="format-dropdown-content">
+            <a href="#" data-size="10px">10px</a>
+            <a href="#" data-size="12px">12px</a>
+            <a href="#" data-size="14px">14px</a>
+            <a href="#" data-size="16px">16px</a>
+            <a href="#" data-size="18px">18px</a>
+            <a href="#" data-size="20px">20px</a>
+            <a href="#" data-size="24px">24px</a>
+          </div>
+        </div>
+        
+        <div class="format-dropdown">
+          <button class="format-dropdown-btn">
+            <span>Inter</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="format-dropdown-content">
+            <a href="#" data-font="Inter, sans-serif">Inter</a>
+            <a href="#" data-font="'EB Garamond', serif">EB Garamond</a>
+            <a href="#" data-font="Arial, sans-serif">Arial</a>
+            <a href="#" data-font="Georgia, serif">Georgia</a>
+            <a href="#" data-font="Courier New, monospace">Courier New</a>
+          </div>
+        </div>
+      </div>
+      
+      <article class="content-editable" id="contentEditable" contenteditable="true">
+        <h1>Add title</h1>
+        <p>Start writing...</p>
+      </article>
+    </div>
+    <textarea id="content" hidden required></textarea>
+  </div>
+
+  <div class="tab-content" id="seo-tab">
+    <div class="form-group">
+      <label for="title">Page Title:</label>
+      <input type="text" id="title" placeholder="My Awesome Blog Post">
+      <div class="help-text">The title that appears in browser tabs and search results (50-60 characters recommended)</div>
+    </div>
+    <div class="form-group">
+      <label for="description">Meta Description:</label>
+      <textarea id="description" placeholder="A brief description of the page content"></textarea>
+      <div class="help-text">A summary of your content that appears in search results (150-160 characters recommended)</div>
+    </div>
+    <div class="form-group">
+      <label for="keywords">Meta Keywords:</label>
+      <input type="text" id="keywords" placeholder="blog, web design, development">
+      <div class="help-text">Comma-separated keywords that describe your content (not as important for SEO as it used to be)</div>
+    </div>
+    <div class="form-group">
+      <label for="author">Author:</label>
+      <input type="text" id="author" placeholder="Your Name">
+      <div class="help-text">The author of this content (helps with authorship attribution)</div>
+    </div>
+    <div class="form-group">
+      <label for="viewport">Viewport:</label>
+      <input type="text" id="viewport" value="width=device-width, initial-scale=1.0">
+      <div class="help-text">Controls how your content displays on mobile devices (recommended to leave as default)</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="settings-tab">
+    <div class="form-group">
+      <label for="repo">Repository (owner/repo):</label>
+      <input type="text" id="repo" required placeholder="yourusername/reponame">
+    </div>
+    <div class="form-group">
+      <label for="path">File path:</label>
+      <input type="text" id="path" required placeholder="docs/index.html">
+    </div>
+  </div>
+</form>
+
+<div id="result"></div>
+
+<script>
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+  });
+});
+
+const contentEditable = document.getElementById('contentEditable');
+const contentInput = document.getElementById('content');
+
+// Format dropdown functionality
+document.querySelectorAll('.format-dropdown-content a').forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.preventDefault();
+    
+    if (e.target.hasAttribute('data-format')) {
+      const format = e.target.getAttribute('data-format');
+      document.execCommand('formatBlock', false, format);
+      
+      // Update the dropdown button text
+      const dropdownBtn = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn span');
+      dropdownBtn.textContent = e.target.textContent;
+    }
+    
+    if (e.target.hasAttribute('data-size')) {
+      const size = e.target.getAttribute('data-size');
+      document.execCommand('fontSize', false, '7'); // Hack to allow custom size
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const span = document.createElement('span');
+        span.style.fontSize = size;
+        range.surroundContents(span);
+      }
+      
+      // Update the dropdown button text
+      const dropdownBtn = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn span');
+      dropdownBtn.textContent = e.target.textContent;
+    }
+    
+    if (e.target.hasAttribute('data-font')) {
+      const font = e.target.getAttribute('data-font');
+      document.execCommand('fontName', false, font);
+      
+      // Update the dropdown button text
+      const dropdownBtn = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn span');
+      dropdownBtn.textContent = e.target.textContent.split(',')[0].replace(/'/g, '');
+    }
+    
+    updateContentInput();
+  });
+});
+
+function updateContentInput() {
+  contentInput.value = contentEditable.innerHTML;
+}
+
+contentEditable.addEventListener('input', updateContentInput);
+
+document.getElementById('htmlForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  updateContentInput();
+
+  const repo = document.getElementById('repo').value;
+  const path = document.getElementById('path').value;
+  const content = document.getElementById('content').value;
+  const title = document.getElementById('title').value;
+  const description = document.getElementById('description').value;
+  const keywords = document.getElementById('keywords').value;
+  const author = document.getElementById('author').value;
+  const viewport = document.getElementById('viewport').value;
+
+  const resultEl = document.getElementById('result');
+  resultEl.innerHTML = '<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#24292e"><path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path></svg> Creating file...';
+  resultEl.className = '';
+
+  try {
+    const response = await fetch('/api/create-html', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        repo, 
+        path, 
+        content,
+        title,
+        description,
+        keywords,
+        author,
+        viewport
+      })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      resultEl.innerHTML = `
+        <p><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2ea44f"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"/><polygon points="10 14.59 7.71 12.29 6.29 13.71 10 17.41 17.71 9.71 16.29 8.29 10 14.59"/></svg> File created successfully!</p>
+        <p><a href="${data.url}" target="_blank">View on GitHub</a></p>
+        <details>
+          <summary>Preview</summary>
+          <iframe src="${data.downloadUrl}" style="width:100%; height:300px; border:1px solid #ddd; margin-top:10px;"></iframe>
+        </details>
+      `;
+      resultEl.classList.add('success');
+    } else {
+      resultEl.innerHTML = `<p><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#cb2431"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"/><rect x="11" y="6" width="2" height="9" rx="1"/><rect x="11" y="17" width="2" height="2" rx="1"/></svg> Error: ${data.error || 'Unknown error'}</p>`;
+      resultEl.classList.add('error');
+    }
+  } catch (error) {
+    resultEl.innerHTML = `<p><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#cb2431"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"/><rect x="11" y="6" width="2" height="9" rx="1"/><rect x="11" y="17" width="2" height="2" rx="1"/></svg> Network error: ${error.message}</p>`;
+    resultEl.classList.add('error');
+  }
+});
+</script>
+</body>
+</html>
