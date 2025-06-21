@@ -57,7 +57,6 @@ h1 {
 .tab {
   padding: 8px 16px;
   cursor: pointer;
-  border-radius: 20px;
   background: transparent;
   border: 1px solid transparent;
   font-weight: 500;
@@ -67,11 +66,10 @@ h1 {
 }
 
 .tab.active {
-  background: rgba(94, 23, 235, 0.1);
-  border-color: var(--purple-dark);
+  border-bottom-color: var(--purple-dark);
   opacity: 1;
   color: var(--purple-dark);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .tab-content {
@@ -140,7 +138,7 @@ button:hover {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--gray-medium);
-  border-radius: 8px;
+  border-radius: 15px;
   background: white;
   overflow: hidden;
 }
@@ -150,7 +148,7 @@ button:hover {
   gap: 8px;
   padding: 8px 16px;
   border-bottom: 1px solid var(--gray-medium);
-  background: var(--gray-light);
+  background: transparent;
   flex-wrap: wrap;
 }
 
@@ -165,21 +163,28 @@ button:hover {
   gap: 4px;
   padding: 6px 12px;
   background: white;
-  border: 1px solid var(--gray-medium);
+  border: none;
   border-radius: 4px;
+  color: var(--text-dark);
   cursor: pointer;
   font-size: 14px;
 }
 
 .format-dropdown-btn:hover {
-  background: var(--gray-light);
+  background: rgba(94, 23, 235, 0.1);
+  border-color: var(--purple-dark);
+  color: var(--purple-dark);
+  font-weight: 700;
 }
 
 .format-dropdown-content {
   display: none;
   position: absolute;
   background-color: white;
-  min-width: 160px;
+  width: max-content;
+  max-width: 350px;
+  max-height: 300px;
+  overflow-y: auto;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
   z-index: 1;
   border: 1px solid var(--gray-medium);
@@ -200,51 +205,66 @@ button:hover {
   background-color: var(--gray-light);
 }
 
-.format-dropdown:hover .format-dropdown-content {
+.format-dropdown.active .format-dropdown-content {
   display: block;
 }
 
+.format-dropdown.active .format-dropdown-btn svg {
+  transform: rotate(180deg);
+}
+
 .content-editable {
-  min-height: 400px;
+  min-height: 600px;
   padding: 20px;
   outline: none;
 }
 
 .content-editable h1 {
   font-family: 'EB Garamond', serif;
-  font-size: 2.5em;
+  font-size: 2.25em; /* 36px */
   margin-bottom: 0.5em;
+  font-size: 36px !important;
 }
 
 .content-editable h2 {
   font-family: 'EB Garamond', serif;
-  font-size: 2em;
+  font-size: 1.875em; /* 30px */
   margin-bottom: 0.5em;
 }
 
 .content-editable h3 {
-  font-size: 1.5em;
+  font-size: 1.5em; /* 24px */
   margin-bottom: 0.5em;
 }
 
 .content-editable h4 {
-  font-size: 1.3em;
+  font-size: 1.25em; /* 20px */
   margin-bottom: 0.5em;
 }
 
 .content-editable h5 {
-  font-size: 1.1em;
+  font-size: 1.125em; /* 18px */
   margin-bottom: 0.5em;
 }
 
 .content-editable h6 {
-  font-size: 1em;
+  font-size: 1em; /* 16px */
   margin-bottom: 0.5em;
   color: var(--gray-dark);
 }
 
 .content-editable p {
   margin-bottom: 1em;
+  font-size: 12px !important;
+}
+
+.format-label {
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.format-description {
+  color: var(--gray-dark);
 }
 
 @media (max-width: 768px) {
@@ -268,7 +288,6 @@ button:hover {
   }
   
   .content-editable {
-    min-height: 300px;
     padding: 15px;
   }
 }
@@ -311,17 +330,17 @@ button:hover {
       <div class="format-toolbar">
         <div class="format-dropdown">
           <button class="format-dropdown-btn">
-            <span>Paragraph</span>
+            <span>Tt</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
           <div class="format-dropdown-content">
-            <a href="#" data-format="p">Paragraph</a>
-            <a href="#" data-format="h1">Heading 1</a>
-            <a href="#" data-format="h2">Heading 2</a>
-            <a href="#" data-format="h3">Heading 3</a>
-            <a href="#" data-format="h4">Heading 4</a>
-            <a href="#" data-format="h5">Heading 5</a>
-            <a href="#" data-format="h6">Heading 6</a>
+            <a href="#" data-format="p"><span class="format-label">Tt</span> <span class="format-description">Paragraph</span></a>
+            <a href="#" data-format="h1"><span class="format-label">H1</span> <span class="format-description">Heading 1</span></a>
+            <a href="#" data-format="h2"><span class="format-label">H2</span> <span class="format-description">Heading 2</span></a>
+            <a href="#" data-format="h3"><span class="format-label">H3</span> <span class="format-description">Heading 3</span></a>
+            <a href="#" data-format="h4"><span class="format-label">H4</span> <span class="format-description">Heading 4</span></a>
+            <a href="#" data-format="h5"><span class="format-label">H5</span> <span class="format-description">Heading 5</span></a>
+            <a href="#" data-format="h6"><span class="format-label">H6</span> <span class="format-description">Heading 6</span></a>
           </div>
         </div>
         
@@ -331,6 +350,7 @@ button:hover {
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
           <div class="format-dropdown-content">
+            <a href="#" data-size="8px">8px</a>
             <a href="#" data-size="10px">10px</a>
             <a href="#" data-size="12px">12px</a>
             <a href="#" data-size="14px">14px</a>
@@ -338,6 +358,14 @@ button:hover {
             <a href="#" data-size="18px">18px</a>
             <a href="#" data-size="20px">20px</a>
             <a href="#" data-size="24px">24px</a>
+            <a href="#" data-size="28px">28px</a>
+            <a href="#" data-size="32px">32px</a>
+            <a href="#" data-size="36px">36px</a>
+            <a href="#" data-size="42px">42px</a>
+            <a href="#" data-size="48px">48px</a>
+            <a href="#" data-size="56px">56px</a>
+            <a href="#" data-size="64px">64px</a>
+            <a href="#" data-size="72px">72px</a>
           </div>
         </div>
         
@@ -357,8 +385,8 @@ button:hover {
       </div>
       
       <article class="content-editable" id="contentEditable" contenteditable="true">
-        <h1>Add title</h1>
-        <p>Start writing...</p>
+        <h1 style="font-size: 36px;">Add title</h1>
+        <p style="font-size: 12px;">Start writing...</p>
       </article>
     </div>
     <textarea id="content" hidden required></textarea>
@@ -419,6 +447,76 @@ document.querySelectorAll('.tab').forEach(tab => {
 const contentEditable = document.getElementById('contentEditable');
 const contentInput = document.getElementById('content');
 
+// Get the dropdown buttons
+const formatDropdownBtn = document.querySelector('[data-format]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
+const sizeDropdownBtn = document.querySelector('[data-size]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
+const fontDropdownBtn = document.querySelector('[data-font]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
+
+// Format mapping for display
+const formatDisplayMap = {
+  'p': 'Tt',
+  'h1': 'H1',
+  'h2': 'H2',
+  'h3': 'H3',
+  'h4': 'H4',
+  'h5': 'H5',
+  'h6': 'H6'
+};
+
+// Toggle dropdowns when clicking the button
+document.querySelectorAll('.format-dropdown-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const dropdown = btn.closest('.format-dropdown');
+    dropdown.classList.toggle('active');
+  });
+});
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.format-dropdown')) {
+    document.querySelectorAll('.format-dropdown').forEach(dropdown => {
+      dropdown.classList.remove('active');
+    });
+  }
+});
+
+// Function to update dropdown buttons based on current selection
+function updateDropdownButtons() {
+  const selection = window.getSelection();
+  if (selection.rangeCount > 0 && !selection.isCollapsed) {
+    const range = selection.getRangeAt(0);
+    const container = range.commonAncestorContainer;
+    const element = container.nodeType === 3 ? container.parentElement : container;
+    
+    // Update format dropdown
+    const blockElement = element.closest('h1, h2, h3, h4, h5, h6, p');
+    if (blockElement) {
+      const tagName = blockElement.tagName.toLowerCase();
+      formatDropdownBtn.textContent = formatDisplayMap[tagName] || 'Tt';
+    }
+    
+    // Update font size dropdown
+    const computedStyle = window.getComputedStyle(element);
+    const fontSize = computedStyle.fontSize;
+    sizeDropdownBtn.textContent = fontSize;
+    
+    // Update font family dropdown
+    const fontFamily = computedStyle.fontFamily;
+    if (fontFamily.includes('EB Garamond')) {
+      fontDropdownBtn.textContent = 'EB Garamond';
+    } else if (fontFamily.includes('Arial')) {
+      fontDropdownBtn.textContent = 'Arial';
+    } else if (fontFamily.includes('Georgia')) {
+      fontDropdownBtn.textContent = 'Georgia';
+    } else if (fontFamily.includes('Courier New')) {
+      fontDropdownBtn.textContent = 'Courier New';
+    } else {
+      fontDropdownBtn.textContent = 'Inter';
+    }
+  }
+}
+
 // Format dropdown functionality
 document.querySelectorAll('.format-dropdown-content a').forEach(item => {
   item.addEventListener('click', (e) => {
@@ -430,7 +528,7 @@ document.querySelectorAll('.format-dropdown-content a').forEach(item => {
       
       // Update the dropdown button text
       const dropdownBtn = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn span');
-      dropdownBtn.textContent = e.target.textContent;
+      dropdownBtn.textContent = formatDisplayMap[format] || 'Tt';
     }
     
     if (e.target.hasAttribute('data-size')) {
@@ -458,6 +556,9 @@ document.querySelectorAll('.format-dropdown-content a').forEach(item => {
       dropdownBtn.textContent = e.target.textContent.split(',')[0].replace(/'/g, '');
     }
     
+    // Close the dropdown after selection
+    e.target.closest('.format-dropdown').classList.remove('active');
+    
     updateContentInput();
   });
 });
@@ -467,6 +568,11 @@ function updateContentInput() {
 }
 
 contentEditable.addEventListener('input', updateContentInput);
+contentEditable.addEventListener('click', updateDropdownButtons);
+contentEditable.addEventListener('keyup', updateDropdownButtons);
+
+// Add selection change listener
+document.addEventListener('selectionchange', updateDropdownButtons);
 
 document.getElementById('htmlForm').addEventListener('submit', async (e) => {
   e.preventDefault();
