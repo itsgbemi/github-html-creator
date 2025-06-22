@@ -618,13 +618,13 @@ const contentEditable = document.getElementById('contentEditable');
 const contentInput = document.getElementById('content');
 
 // Get the dropdown buttons
-const formatDropdownBtn = document.querySelector('[data-format]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
-const sizeDropdownBtn = document.querySelector('[data-size]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
-const fontDropdownBtn = document.querySelector('[data-font]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
-const lineHeightDropdownBtn = document.querySelector('[data-lineheight]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
-const alignDropdownBtn = document.querySelector('[data-align]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
-const colorDropdownBtn = document.querySelector('[data-color]').closest('.format-dropdown').querySelector('.format-dropdown-btn .color-preview');
-const highlightDropdownBtn = document.querySelector('[data-highlight]').closest('.format-dropdown').querySelector('.format-dropdown-btn .highlight-preview');
+const formatDropdownBtn = document.querySelector('.format-dropdown:nth-child(1) .format-dropdown-btn span');
+const sizeDropdownBtn = document.querySelector('.format-dropdown:nth-child(2) .format-dropdown-btn span');
+const fontDropdownBtn = document.querySelector('.format-dropdown:nth-child(3) .format-dropdown-btn span');
+const lineHeightDropdownBtn = document.querySelector('.format-dropdown:nth-child(4) .format-dropdown-btn span');
+const alignDropdownBtn = document.querySelector('.format-dropdown:nth-child(5) .format-dropdown-btn .align-icon');
+const colorDropdownBtn = document.querySelector('.format-dropdown:nth-child(6) .format-dropdown-btn .color-preview');
+const highlightDropdownBtn = document.querySelector('.format-dropdown:nth-child(7) .format-dropdown-btn .highlight-preview');
 
 // Format mapping for display
 const formatDisplayMap = {
@@ -650,6 +650,9 @@ document.querySelectorAll('.format-dropdown-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
     const dropdown = btn.closest('.format-dropdown');
+    document.querySelectorAll('.format-dropdown').forEach(d => {
+      if (d !== dropdown) d.classList.remove('active');
+    });
     dropdown.classList.toggle('active');
   });
 });
@@ -713,7 +716,7 @@ function updateDropdownButtons() {
     // Update alignment dropdown
     const textAlign = computedStyle.textAlign;
     if (textAlign && alignIconMap[textAlign]) {
-      const alignIcon = document.querySelector('.format-dropdown-btn .align-icon');
+      const alignIcon = document.querySelector('.format-dropdown:nth-child(5) .format-dropdown-btn .align-icon');
       alignIcon.className = 'align-icon ' + alignIconMap[textAlign];
     }
   }
@@ -724,17 +727,17 @@ document.querySelectorAll('.format-dropdown-content a').forEach(item => {
   item.addEventListener('click', (e) => {
     e.preventDefault();
     
-    if (e.target.hasAttribute('data-format')) {
-      const format = e.target.getAttribute('data-format');
-      document.execCommand('formatBlock', false, format);
+    if (item.hasAttribute('data-format')) {
+      const format = item.getAttribute('data-format');
+      document.execCommand('formatBlock', false, `<${format}>`);
       
       // Update the dropdown button text
-      const dropdownBtn = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn span');
+      const dropdownBtn = item.closest('.format-dropdown').querySelector('.format-dropdown-btn span');
       dropdownBtn.textContent = formatDisplayMap[format] || 'Tt';
     }
     
-    if (e.target.hasAttribute('data-size')) {
-      const size = e.target.getAttribute('data-size');
+    if (item.hasAttribute('data-size')) {
+      const size = item.getAttribute('data-size');
       document.execCommand('fontSize', false, '7'); // Hack to allow custom size
       const selection = window.getSelection();
       if (selection.rangeCount > 0) {
@@ -745,48 +748,48 @@ document.querySelectorAll('.format-dropdown-content a').forEach(item => {
       }
       
       // Update the dropdown button text
-      const dropdownBtn = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn span');
-      dropdownBtn.textContent = e.target.textContent;
+      const dropdownBtn = item.closest('.format-dropdown').querySelector('.format-dropdown-btn span');
+      dropdownBtn.textContent = item.textContent;
     }
     
-    if (e.target.hasAttribute('data-font')) {
-      const font = e.target.getAttribute('data-font');
+    if (item.hasAttribute('data-font')) {
+      const font = item.getAttribute('data-font');
       document.execCommand('fontName', false, font);
       
       // Update the dropdown button text
-      const dropdownBtn = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn span');
-      dropdownBtn.textContent = e.target.textContent.split(',')[0].replace(/'/g, '');
+      const dropdownBtn = item.closest('.format-dropdown').querySelector('.format-dropdown-btn span');
+      dropdownBtn.textContent = item.textContent.split(',')[0].replace(/'/g, '');
     }
     
-    if (e.target.hasAttribute('data-lineheight')) {
-      const lineHeight = e.target.getAttribute('data-lineheight');
+    if (item.hasAttribute('data-lineheight')) {
+      const lineHeight = item.getAttribute('data-lineheight');
       contentEditable.style.lineHeight = lineHeight;
       
       // Update the dropdown button text
       lineHeightDropdownBtn.textContent = lineHeight;
     }
     
-    if (e.target.hasAttribute('data-align')) {
-      const align = e.target.getAttribute('data-align');
+    if (item.hasAttribute('data-align')) {
+      const align = item.getAttribute('data-align');
       document.execCommand('justify' + align.charAt(0).toUpperCase() + align.slice(1));
       
       // Update the dropdown button icon
-      const alignIcon = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn .align-icon');
+      const alignIcon = item.closest('.format-dropdown').querySelector('.format-dropdown-btn .align-icon');
       alignIcon.className = 'align-icon ' + alignIconMap[align];
     }
     
-    if (e.target.hasAttribute('data-color')) {
-      const color = e.target.getAttribute('data-color');
+    if (item.hasAttribute('data-color')) {
+      const color = item.getAttribute('data-color');
       document.execCommand('foreColor', false, color);
       
       // Update the dropdown button preview
-      const colorPreview = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn .color-preview');
+      const colorPreview = item.closest('.format-dropdown').querySelector('.format-dropdown-btn .color-preview');
       colorPreview.style.backgroundColor = color;
     }
     
-    if (e.target.hasAttribute('data-highlight')) {
-      const highlight = e.target.getAttribute('data-highlight');
-      const highlightPreview = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn .highlight-preview');
+    if (item.hasAttribute('data-highlight')) {
+      const highlight = item.getAttribute('data-highlight');
+      const highlightPreview = item.closest('.format-dropdown').querySelector('.format-dropdown-btn .highlight-preview');
       
       if (highlight === 'none') {
         document.execCommand('hiliteColor', false, 'transparent');
@@ -800,7 +803,7 @@ document.querySelectorAll('.format-dropdown-content a').forEach(item => {
     }
     
     // Close the dropdown after selection
-    e.target.closest('.format-dropdown').classList.remove('active');
+    item.closest('.format-dropdown').classList.remove('active');
     
     updateContentInput();
   });
