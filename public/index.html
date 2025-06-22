@@ -48,6 +48,12 @@ h1 {
   margin-bottom: 20px;
 }
 
+.top-bar-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 .tabs {
   display: flex;
   gap: 8px;
@@ -402,6 +408,38 @@ button:hover {
   text-decoration: line-through;
 }
 
+/* Undo/Redo button styles */
+.history-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid var(--gray-medium);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-dark);
+}
+
+.history-btn:hover {
+  background: rgba(94, 23, 235, 0.1);
+  color: var(--purple-dark);
+  border-color: var(--purple-dark);
+}
+
+.history-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--gray-light);
+  border-color: var(--gray-medium);
+}
+
+.history-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
 @media (max-width: 768px) {
   body {
     font-size: 14px;
@@ -426,9 +464,14 @@ button:hover {
     padding: 15px;
   }
   
-  .format-btn {
+  .format-btn, .history-btn {
     width: 28px;
     height: 28px;
+    font-size: 12px;
+  }
+
+  .history-btn {
+    padding: 6px 8px;
     font-size: 12px;
   }
 }
@@ -450,13 +493,39 @@ button:hover {
   input, textarea {
     padding: 10px 14px;
   }
+
+  .top-bar-actions {
+    gap: 6px;
+  }
+
+  .history-btn span {
+    display: none;
+  }
+
+  .history-btn {
+    padding: 8px;
+  }
 }
 </style>
 </head>
 <body>
 <div class="top-bar">
   <h1>Blog Editor</h1>
-  <button type="submit" form="htmlForm">Create File</button>
+  <div class="top-bar-actions">
+    <button class="history-btn" id="undoBtn" title="Undo" disabled>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 10h10a8 8 0 0 1 8 8v2M3 10l6-6m-6 6l6 6"/>
+      </svg>
+      <span>Undo</span>
+    </button>
+    <button class="history-btn" id="redoBtn" title="Redo" disabled>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 10H11a8 8 0 0 0-8 8v2m0 0l6-6m-6 6l6 6"/>
+      </svg>
+      <span>Redo</span>
+    </button>
+    <button type="submit" form="htmlForm">Create File</button>
+  </div>
 </div>
 
 <form id="htmlForm">
@@ -670,6 +739,14 @@ document.querySelectorAll('.tab').forEach(tab => {
 
 const contentEditable = document.getElementById('contentEditable');
 const contentInput = document.getElementById('content');
+const undoBtn = document.getElementById('undoBtn');
+const redoBtn = document.getElementById('redoBtn');
+
+// History management
+let history = [];
+let historyIndex = -1;
+let isUndoing = false;
+let isRedoing = false;
 
 // Get the dropdown buttons
 const formatDropdownBtn = document.querySelector('.format-dropdown:nth-child(5) .format-dropdown-btn span');
@@ -698,6 +775,67 @@ const alignIconMap = {
   'right': 'align-right-icon',
   'justify': 'align-justify-icon'
 };
+
+// Save current state to history
+function saveState() {
+  if (isUndoing || isRedoing) return;
+  
+  // If we're not at the end of history, remove future states
+  if (historyIndex < history.length - 1) {
+    history = history.slice(0, historyIndex + 1);
+  }
+  
+  const html = contentEditable.innerHTML;
+  
+  // Don't save if the content hasn't changed
+  if (history.length > 0 && history[historyIndex] === html) {
+    return;
+  }
+  
+  history.push(html);
+  historyIndex++;
+  
+  // Limit history size to prevent memory issues
+  if (history.length > 50) {
+    history.shift();
+    historyIndex--;
+  }
+  
+  updateHistoryButtons();
+}
+
+// Undo the last action
+function undo() {
+  if (historyIndex <= 0) return;
+  
+  isUndoing = true;
+  historyIndex--;
+  contentEditable.innerHTML = history[historyIndex];
+  isUndoing = false;
+  
+  updateHistoryButtons();
+}
+
+// Redo the last undone action
+function redo() {
+  if (historyIndex >= history.length - 1) return;
+  
+  isRedoing = true;
+  historyIndex++;
+  contentEditable.innerHTML = history[historyIndex];
+  isRedoing = false;
+  
+  updateHistoryButtons();
+}
+
+// Update undo/redo button states
+function updateHistoryButtons() {
+  undoBtn.disabled = historyIndex <= 0;
+  redoBtn.disabled = historyIndex >= history.length - 1;
+}
+
+// Initialize history with current content
+saveState();
 
 // Toggle dropdowns when clicking the button
 document.querySelectorAll('.format-dropdown-btn').forEach(btn => {
@@ -915,7 +1053,24 @@ document.querySelectorAll('.format-dropdown-content a').forEach(item => {
 
 function updateContentInput() {
   contentInput.value = contentEditable.innerHTML;
+  saveState();
 }
+
+// Undo/Redo button event listeners
+undoBtn.addEventListener('click', undo);
+redoBtn.addEventListener('click', redo);
+
+// Keyboard shortcuts for undo/redo
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+    if (e.shiftKey) {
+      redo();
+    } else {
+      undo();
+    }
+    e.preventDefault();
+  }
+});
 
 contentEditable.addEventListener('input', updateContentInput);
 contentEditable.addEventListener('click', updateDropdownButtons);
