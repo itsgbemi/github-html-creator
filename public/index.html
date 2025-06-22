@@ -26,7 +26,7 @@ body {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  line-height: 1.5; /* Changed default line height to 1.5 */
+  line-height: 1.5;
   color: var(--text-dark);
   letter-spacing: -0.01em;
   background-color: var(--purple);
@@ -218,39 +218,39 @@ button:hover {
   padding: 20px;
   outline: none;
   font-size: 16px;
-  line-height: 1.5; /* Changed default line height to 1.5 */
+  line-height: 1.5;
 }
 
 .content-editable h1 {
   font-family: 'EB Garamond', serif;
-  font-size: 2.25em; /* 36px */
+  font-size: 2.25em;
   margin-bottom: 0.5em;
   font-size: 36px !important;
 }
 
 .content-editable h2 {
   font-family: 'EB Garamond', serif;
-  font-size: 1.875em; /* 30px */
+  font-size: 1.875em;
   margin-bottom: 0.5em;
 }
 
 .content-editable h3 {
-  font-size: 1.5em; /* 24px */
+  font-size: 1.5em;
   margin-bottom: 0.5em;
 }
 
 .content-editable h4 {
-  font-size: 1.25em; /* 20px */
+  font-size: 1.25em;
   margin-bottom: 0.5em;
 }
 
 .content-editable h5 {
-  font-size: 1.125em; /* 18px */
+  font-size: 1.125em;
   margin-bottom: 0.5em;
 }
 
 .content-editable h6 {
-  font-size: 1em; /* 16px */
+  font-size: 1em;
   margin-bottom: 0.5em;
   color: var(--gray-dark);
 }
@@ -305,6 +305,59 @@ button:hover {
 
 .align-justify-icon {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='4' y1='6' x2='20' y2='6'%3E%3C/line%3E%3Cline x1='4' y1='12' x2='20' y2='12'%3E%3C/line%3E%3Cline x1='4' y1='18' x2='20' y2='18'%3E%3C/line%3E%3C/svg%3E");
+}
+
+/* Color dropdown styles */
+.color-circle {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.color-option {
+  display: flex;
+  align-items: center;
+}
+
+.color-preview {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  margin-right: 8px;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.highlight-preview {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  margin-right: 8px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background-color: transparent;
+  position: relative;
+}
+
+.highlight-preview::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #999;
+  transform: rotate(-45deg);
+  transform-origin: center;
+  display: none;
+}
+
+.highlight-preview.none::after {
+  display: block;
 }
 
 @media (max-width: 768px) {
@@ -452,6 +505,53 @@ button:hover {
             <a href="#" data-align="justify"><span class="align-icon align-justify-icon"></span> Justify</a>
           </div>
         </div>
+        
+        <div class="format-dropdown">
+          <button class="format-dropdown-btn">
+            <span class="color-preview" style="background-color: #000000;"></span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="format-dropdown-content">
+            <div class="dropdown-title">Text Color</div>
+            <a href="#" data-color="#000000"><span class="color-option"><span class="color-circle" style="background-color: #000000;"></span> Black</span></a>
+            <a href="#" data-color="#333333"><span class="color-option"><span class="color-circle" style="background-color: #333333;"></span> Dark Gray</span></a>
+            <a href="#" data-color="#666666"><span class="color-option"><span class="color-circle" style="background-color: #666666;"></span> Gray</span></a>
+            <a href="#" data-color="#999999"><span class="color-option"><span class="color-circle" style="background-color: #999999;"></span> Light Gray</span></a>
+            <a href="#" data-color="#ffffff"><span class="color-option"><span class="color-circle" style="background-color: #ffffff; border: 1px solid #ddd;"></span> White</span></a>
+            <a href="#" data-color="#ff0000"><span class="color-option"><span class="color-circle" style="background-color: #ff0000;"></span> Red</span></a>
+            <a href="#" data-color="#00ff00"><span class="color-option"><span class="color-circle" style="background-color: #00ff00;"></span> Green</span></a>
+            <a href="#" data-color="#0000ff"><span class="color-option"><span class="color-circle" style="background-color: #0000ff;"></span> Blue</span></a>
+            <a href="#" data-color="#ffff00"><span class="color-option"><span class="color-circle" style="background-color: #ffff00;"></span> Yellow</span></a>
+            <a href="#" data-color="#ff00ff"><span class="color-option"><span class="color-circle" style="background-color: #ff00ff;"></span> Magenta</span></a>
+            <a href="#" data-color="#00ffff"><span class="color-option"><span class="color-circle" style="background-color: #00ffff;"></span> Cyan</span></a>
+            <a href="#" data-color="#ff9900"><span class="color-option"><span class="color-circle" style="background-color: #ff9900;"></span> Orange</span></a>
+            <a href="#" data-color="#9900ff"><span class="color-option"><span class="color-circle" style="background-color: #9900ff;"></span> Purple</span></a>
+            <a href="#" data-color="#5e17eb"><span class="color-option"><span class="color-circle" style="background-color: #5e17eb;"></span> Violet</span></a>
+            <a href="#" data-color="#ff69b4"><span class="color-option"><span class="color-circle" style="background-color: #ff69b4;"></span> Pink</span></a>
+            <a href="#" data-color="#8b4513"><span class="color-option"><span class="color-circle" style="background-color: #8b4513;"></span> Brown</span></a>
+          </div>
+        </div>
+        
+        <div class="format-dropdown">
+          <button class="format-dropdown-btn">
+            <span class="highlight-preview none"></span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="format-dropdown-content">
+            <div class="dropdown-title">Highlight Color</div>
+            <a href="#" data-highlight="none"><span class="color-option"><span class="color-circle" style="background-color: transparent; position: relative;"><span style="position: absolute; top: 50%; left: 0; right: 0; height: 2px; background-color: #999; transform: rotate(-45deg);"></span></span> None</span></a>
+            <a href="#" data-highlight="#ffff00"><span class="color-option"><span class="color-circle" style="background-color: #ffff00;"></span> Yellow</span></a>
+            <a href="#" data-highlight="#ffcc00"><span class="color-option"><span class="color-circle" style="background-color: #ffcc00;"></span> Gold</span></a>
+            <a href="#" data-highlight="#ff9999"><span class="color-option"><span class="color-circle" style="background-color: #ff9999;"></span> Pink</span></a>
+            <a href="#" data-highlight="#99ff99"><span class="color-option"><span class="color-circle" style="background-color: #99ff99;"></span> Mint</span></a>
+            <a href="#" data-highlight="#99ccff"><span class="color-option"><span class="color-circle" style="background-color: #99ccff;"></span> Sky Blue</span></a>
+            <a href="#" data-highlight="#cc99ff"><span class="color-option"><span class="color-circle" style="background-color: #cc99ff;"></span> Lavender</span></a>
+            <a href="#" data-highlight="#ffcc99"><span class="color-option"><span class="color-circle" style="background-color: #ffcc99;"></span> Peach</span></a>
+            <a href="#" data-highlight="#ccff99"><span class="color-option"><span class="color-circle" style="background-color: #ccff99;"></span> Lime</span></a>
+            <a href="#" data-highlight="#ff9966"><span class="color-option"><span class="color-circle" style="background-color: #ff9966;"></span> Coral</span></a>
+            <a href="#" data-highlight="#66ffcc"><span class="color-option"><span class="color-circle" style="background-color: #66ffcc;"></span> Aqua</span></a>
+          </div>
+        </div>
       </div>
       
       <article class="content-editable" id="contentEditable" contenteditable="true">
@@ -523,6 +623,8 @@ const sizeDropdownBtn = document.querySelector('[data-size]').closest('.format-d
 const fontDropdownBtn = document.querySelector('[data-font]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
 const lineHeightDropdownBtn = document.querySelector('[data-lineheight]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
 const alignDropdownBtn = document.querySelector('[data-align]').closest('.format-dropdown').querySelector('.format-dropdown-btn span');
+const colorDropdownBtn = document.querySelector('[data-color]').closest('.format-dropdown').querySelector('.format-dropdown-btn .color-preview');
+const highlightDropdownBtn = document.querySelector('[data-highlight]').closest('.format-dropdown').querySelector('.format-dropdown-btn .highlight-preview');
 
 // Format mapping for display
 const formatDisplayMap = {
@@ -595,6 +697,19 @@ function updateDropdownButtons() {
       fontDropdownBtn.textContent = 'Inter';
     }
     
+    // Update color dropdown
+    const color = computedStyle.color;
+    colorDropdownBtn.style.backgroundColor = color;
+    
+    // Update highlight dropdown
+    const bgColor = computedStyle.backgroundColor;
+    highlightDropdownBtn.style.backgroundColor = bgColor;
+    if (bgColor === 'rgba(0, 0, 0, 0)' || bgColor === 'transparent') {
+      highlightDropdownBtn.classList.add('none');
+    } else {
+      highlightDropdownBtn.classList.remove('none');
+    }
+    
     // Update alignment dropdown
     const textAlign = computedStyle.textAlign;
     if (textAlign && alignIconMap[textAlign]) {
@@ -660,6 +775,30 @@ document.querySelectorAll('.format-dropdown-content a').forEach(item => {
       alignIcon.className = 'align-icon ' + alignIconMap[align];
     }
     
+    if (e.target.hasAttribute('data-color')) {
+      const color = e.target.getAttribute('data-color');
+      document.execCommand('foreColor', false, color);
+      
+      // Update the dropdown button preview
+      const colorPreview = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn .color-preview');
+      colorPreview.style.backgroundColor = color;
+    }
+    
+    if (e.target.hasAttribute('data-highlight')) {
+      const highlight = e.target.getAttribute('data-highlight');
+      const highlightPreview = e.target.closest('.format-dropdown').querySelector('.format-dropdown-btn .highlight-preview');
+      
+      if (highlight === 'none') {
+        document.execCommand('hiliteColor', false, 'transparent');
+        highlightPreview.style.backgroundColor = 'transparent';
+        highlightPreview.classList.add('none');
+      } else {
+        document.execCommand('hiliteColor', false, highlight);
+        highlightPreview.style.backgroundColor = highlight;
+        highlightPreview.classList.remove('none');
+      }
+    }
+    
     // Close the dropdown after selection
     e.target.closest('.format-dropdown').classList.remove('active');
     
@@ -692,7 +831,7 @@ document.getElementById('htmlForm').addEventListener('submit', async (e) => {
   const viewport = document.getElementById('viewport').value;
 
   const resultEl = document.getElementById('result');
-  resultEl.innerHTML = '<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#24292e"><path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path></svg> Creating file...';
+  resultEl.innerHTML = '<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#24292e"><path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path></svg> Creating file...';
   resultEl.className = '';
 
   try {
