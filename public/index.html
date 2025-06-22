@@ -360,6 +360,48 @@ button:hover {
   display: block;
 }
 
+/* Format button styles */
+.format-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-dark);
+}
+
+.format-btn:hover {
+  background: rgba(94, 23, 235, 0.1);
+  color: var(--purple-dark);
+}
+
+.format-btn.active {
+  background: rgba(94, 23, 235, 0.2);
+  color: var(--purple-dark);
+  font-weight: 700;
+}
+
+.format-btn.bold {
+  font-weight: 700;
+}
+
+.format-btn.italic {
+  font-style: italic;
+}
+
+.format-btn.underline {
+  text-decoration: underline;
+}
+
+.format-btn.strikethrough {
+  text-decoration: line-through;
+}
+
 @media (max-width: 768px) {
   body {
     font-size: 14px;
@@ -382,6 +424,12 @@ button:hover {
   
   .content-editable {
     padding: 15px;
+  }
+  
+  .format-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
   }
 }
 
@@ -421,6 +469,12 @@ button:hover {
   <div class="tab-content active" id="content-tab">
     <div class="editor-container">
       <div class="format-toolbar">
+        <!-- Basic formatting buttons -->
+        <button class="format-btn bold" title="Bold" data-command="bold">B</button>
+        <button class="format-btn italic" title="Italic" data-command="italic">I</button>
+        <button class="format-btn underline" title="Underline" data-command="underline">U</button>
+        <button class="format-btn strikethrough" title="Strikethrough" data-command="strikeThrough">S</button>
+        
         <div class="format-dropdown">
           <button class="format-dropdown-btn">
             <span>Tt</span>
@@ -618,13 +672,13 @@ const contentEditable = document.getElementById('contentEditable');
 const contentInput = document.getElementById('content');
 
 // Get the dropdown buttons
-const formatDropdownBtn = document.querySelector('.format-dropdown:nth-child(1) .format-dropdown-btn span');
-const sizeDropdownBtn = document.querySelector('.format-dropdown:nth-child(2) .format-dropdown-btn span');
-const fontDropdownBtn = document.querySelector('.format-dropdown:nth-child(3) .format-dropdown-btn span');
-const lineHeightDropdownBtn = document.querySelector('.format-dropdown:nth-child(4) .format-dropdown-btn span');
-const alignDropdownBtn = document.querySelector('.format-dropdown:nth-child(5) .format-dropdown-btn .align-icon');
-const colorDropdownBtn = document.querySelector('.format-dropdown:nth-child(6) .format-dropdown-btn .color-preview');
-const highlightDropdownBtn = document.querySelector('.format-dropdown:nth-child(7) .format-dropdown-btn .highlight-preview');
+const formatDropdownBtn = document.querySelector('.format-dropdown:nth-child(5) .format-dropdown-btn span');
+const sizeDropdownBtn = document.querySelector('.format-dropdown:nth-child(6) .format-dropdown-btn span');
+const fontDropdownBtn = document.querySelector('.format-dropdown:nth-child(7) .format-dropdown-btn span');
+const lineHeightDropdownBtn = document.querySelector('.format-dropdown:nth-child(8) .format-dropdown-btn span');
+const alignDropdownBtn = document.querySelector('.format-dropdown:nth-child(9) .format-dropdown-btn .align-icon');
+const colorDropdownBtn = document.querySelector('.format-dropdown:nth-child(10) .format-dropdown-btn .color-preview');
+const highlightDropdownBtn = document.querySelector('.format-dropdown:nth-child(11) .format-dropdown-btn .highlight-preview');
 
 // Format mapping for display
 const formatDisplayMap = {
@@ -666,6 +720,18 @@ document.addEventListener('click', (e) => {
   }
 });
 
+// Function to get the actual font size of an element, including inline styles
+function getActualFontSize(element) {
+  // First check for inline style
+  if (element.style.fontSize) {
+    return element.style.fontSize;
+  }
+  
+  // Then check computed style
+  const computedStyle = window.getComputedStyle(element);
+  return computedStyle.fontSize;
+}
+
 // Function to update dropdown buttons based on current selection
 function updateDropdownButtons() {
   const selection = window.getSelection();
@@ -682,11 +748,28 @@ function updateDropdownButtons() {
     }
     
     // Update font size dropdown
-    const computedStyle = window.getComputedStyle(element);
-    const fontSize = computedStyle.fontSize;
-    sizeDropdownBtn.textContent = fontSize.replace('px', '');
+    // Check if the element has an inline font size
+    let fontSize = getActualFontSize(element);
+    
+    // If not, check parent elements
+    if (!fontSize || fontSize === '16px') {
+      let parent = element.parentElement;
+      while (parent && parent !== contentEditable) {
+        const parentFontSize = getActualFontSize(parent);
+        if (parentFontSize && parentFontSize !== '16px') {
+          fontSize = parentFontSize;
+          break;
+        }
+        parent = parent.parentElement;
+      }
+    }
+    
+    if (fontSize) {
+      sizeDropdownBtn.textContent = fontSize.replace('px', '');
+    }
     
     // Update font family dropdown
+    const computedStyle = window.getComputedStyle(element);
     const fontFamily = computedStyle.fontFamily;
     if (fontFamily.includes('EB Garamond')) {
       fontDropdownBtn.textContent = 'EB Garamond';
@@ -716,11 +799,32 @@ function updateDropdownButtons() {
     // Update alignment dropdown
     const textAlign = computedStyle.textAlign;
     if (textAlign && alignIconMap[textAlign]) {
-      const alignIcon = document.querySelector('.format-dropdown:nth-child(5) .format-dropdown-btn .align-icon');
+      const alignIcon = document.querySelector('.format-dropdown:nth-child(9) .format-dropdown-btn .align-icon');
       alignIcon.className = 'align-icon ' + alignIconMap[textAlign];
     }
+    
+    // Update basic formatting buttons
+    const isBold = document.queryCommandState('bold');
+    const isItalic = document.queryCommandState('italic');
+    const isUnderline = document.queryCommandState('underline');
+    const isStrikethrough = document.queryCommandState('strikeThrough');
+    
+    document.querySelector('.format-btn.bold').classList.toggle('active', isBold);
+    document.querySelector('.format-btn.italic').classList.toggle('active', isItalic);
+    document.querySelector('.format-btn.underline').classList.toggle('active', isUnderline);
+    document.querySelector('.format-btn.strikethrough').classList.toggle('active', isStrikethrough);
   }
 }
+
+// Basic formatting button functionality
+document.querySelectorAll('.format-btn[data-command]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const command = btn.getAttribute('data-command');
+    document.execCommand(command, false, null);
+    btn.classList.toggle('active', document.queryCommandState(command));
+    updateContentInput();
+  });
+});
 
 // Format dropdown functionality
 document.querySelectorAll('.format-dropdown-content a').forEach(item => {
